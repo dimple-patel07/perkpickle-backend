@@ -1,5 +1,10 @@
 const pg = require("pg");
+const client = getClient();
 function getClient() {
+	// expecting db with following credentials
+	// CREATE USER perkpickle WITH PASSWORD 'perkpickle123';
+	// CREATE DATABASE perkpickle_db OWNER perkpickle;
+	// $ psql -h localhost -d perkpickle_db -U perkpickle;
 	const client = new pg.Client({
 		host: process.env.DB_HOST,
 		database: process.env.DB_NAME,
@@ -10,13 +15,12 @@ function getClient() {
 }
 function connectDb() {
 	return new Promise((resolve) => {
-		const client = getClient();
 		client.connect(function (error) {
-			let result = false;
+			let result = null;
 			if (error) {
 				console.error("Connection error :: ", error);
 			} else {
-				result = true;
+				result = client;
 				console.log("Connected!");
 			}
 			resolve(result);
@@ -39,13 +43,53 @@ function disConnectDb() {
 	});
 }
 
-async function createTable() {}
+function createNewUser(data) {
+	return new Promise((resolve) => {
+		const sql = `INSERT INTO users (email, name, zip_code, address, phone_number, secret_key, otp, is_verified) VALUES (
+            '${data.email}',
+            '${data.name}',
+            ${data.zip_code},
+            ${data.address ? `'${data.address}'` : null},
+            '${data.phone_number}',
+            '${data.secret_key}',
+            ${data.otp ? data.otp : null},
+            ${data.is_verified}
+        )`;
+		client.query(sql, function (error, result) {
+			let isCreated = false;
+			if (error) {
+				console.error("Insertion error :: ", error);
+			} else {
+				isCreated = true;
+				console.log("New user created");
+			}
+			resolve(isCreated);
+		});
+	});
+}
 
-async function insertRecord() {}
-// async function initialSetup() {
-// 	const isConnected = await connectDb();
-// 	if (isConnected) {
-// 	}
-// }
+function updateUser(data) {
+	return new Promise((resolve) => {
+		const sql = `UPDATE users SET
+            email = '${data.email}',
+            name = '${data.name}',
+            zip_code = ${data.zip_code},
+            address = ${data.address ? `'${data.address}'` : null},
+            phone_number = '${data.phone_number}',
+            secret_key = '${data.secret_key}',
+            otp = ${data.otp ? data.otp : null},
+            is_verified = ${data.is_verified} WHERE email = '${data.email}'`;
+		client.query(sql, function (error, result) {
+			let isUpdated = false;
+			if (error) {
+				console.error("Updation error :: ", error);
+			} else {
+				isUpdated = true;
+				console.log("User updated");
+			}
+			resolve(isUpdated);
+		});
+	});
+}
 
-module.exports = { connectDb, disConnectDb };
+module.exports = { connectDb, disConnectDb, createNewUser, updateUser };
