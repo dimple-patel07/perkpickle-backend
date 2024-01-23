@@ -1,9 +1,10 @@
 const dbService = require("./db_service");
-let client;
-async function setup() {
-	client = await dbService.connectDb();
-	if (client) {
-		const isCreated = await createUserTable();
+// only applicable for initial table setup
+async function setup(req, res) {
+	let msg;
+	try {
+		res.statusCode = 500;
+		const isCreated = await dbService.createUserTable();
 		if (isCreated) {
 			const data = {
 				email: "help@perkpickle.com",
@@ -15,40 +16,25 @@ async function setup() {
 				is_verified: false,
 				otp: Math.floor(Math.random() * 10),
 			};
-			const isCreated = await dbService.createNewUser(data);
+			const isCreated = await dbService.createUser(data);
 			if (isCreated) {
 				// update with verified tag
 				data.is_verified = true;
 				data.otp = null;
-				await dbService.updateUser(data);
+				const isUpdated = await dbService.updateUser(data);
+				if (isUpdated) {
+					res.statusCode = 200;
+					msg = "setup successfully completed";
+				}
 			}
 		}
+	} catch (error) {
+		console.error("initial setup error :: ", error);
+	} finally {
+		if (!msg) {
+			msg = "setup failed";
+		}
+		return msg;
 	}
-	await dbService.disConnectDb();
-}
-async function createUserTable() {
-	return new Promise((resolve) => {
-		const sql = `CREATE TABLE IF NOT EXISTS users (
-            id SERIAL,
-            email VARCHAR(255) primary key,
-            name VARCHAR(255) not null,
-            zip_code INT not null,
-            address VARCHAR(255),
-            phone_number VARCHAR(255) not null,
-            secret_key VARCHAR(255) not null,
-            is_verified BOOLEAN DEFAULT false,
-            otp INT
-        )`;
-		client.query(sql, function (error, result) {
-			let isCreated = false;
-			if (error) {
-				console.error("Table creation error :: ", error);
-			} else {
-				isCreated = true;
-				console.log("Table created");
-			}
-			resolve(isCreated);
-		});
-	});
 }
 module.exports = { setup };

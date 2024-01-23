@@ -1,0 +1,408 @@
+{
+	"info": {
+		"_postman_id": "648b5ec7-022d-438f-a410-35ce7cae004a",
+		"name": "PerkPickle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "spendBonusCategoryList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3300/spendBonusCategoryList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"spendBonusCategoryList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "spendBonusCategoryCard",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"spendBonusCategoryId\": 176638649}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/spendBonusCategoryCard",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"spendBonusCategoryCard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cardDetailByCardKey",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"cardKey\": \"citi-thankyoupreferred\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/cardDetailByCardKey",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"cardDetailByCardKey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCardImage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"cardKey\": \"comenity-aaadaily\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/getCardImage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"getCardImage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\": \"test\", \"password\": \"test\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initialSetup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3300/initialSetup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"initialSetup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllCards",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3300/getAllCards",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"getAllCards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verifyUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"help@xyz.com\", \"otp\": 396118}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/verifyUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"verifyUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"help@xyz.com\", \"name\": \"xyz\", \"zip_code\": 73201, \"address\": \"NY US\", \"phone_number\": \"1(123)555-3890\", \"password\": \"xyz@123\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsInBhc3N3b3JkIjoicHFyQDEyMyJ9\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserByEmail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"help@xyz.com\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/getUserByEmail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"getUserByEmail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "forgotPassword",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\": \"help@xyz.com\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/forgotPassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"forgotPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetPassword",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsIm90cCI6NDM2OTMyLCJuZXdQYXNzd29yZCI6InBxckAxMjMifQ==\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/resetPassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"resetPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changePassword",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsInBhc3N3b3JkIjoicHFyQDEyMyIsIm5ld1Bhc3N3b3JkIjoiYWJjQDEyMyJ9\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/changePassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"changePassword"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
