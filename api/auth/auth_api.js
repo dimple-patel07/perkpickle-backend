@@ -4,7 +4,8 @@ const commonUtils = require("../../services/utils/common_utils");
 async function login(req, res) {
 	let result = null;
 	try {
-		res.statusCode = 500;
+		result = { error: "invalid login details" };
+		res.statusCode = 400;
 		if (req.body.key) {
 			let params = commonUtils.decryptStr(req.body.key);
 			if (params) {
@@ -21,12 +22,11 @@ async function login(req, res) {
 							result = { error: "unverified user" };
 						}
 					} else {
-						result = { error: "invalid login" };
+						res.statusCode = 500;
+						result = { error: "email or password doesn't match" };
 					}
 				}
 			}
-		} else {
-			res.statusCode = 400;
 		}
 	} catch (error) {
 		console.error("login api failed :: ", error);
@@ -72,9 +72,9 @@ async function resetPassword(req, res) {
 			let params = commonUtils.decryptStr(key);
 			if (params) {
 				params = JSON.parse(params);
-				if (params && params.email && params.otp && params.newPassword) {
+				if (params && params.email && params.newPassword) {
 					// email, otp & new password required
-					const data = await dbService.getUserByEmailAndOtp(params.email, params.otp);
+					const data = await dbService.getUserByEmail(params.email);
 					if (data && data.email) {
 						data.otp = null;
 						data.secret_key = commonUtils.encryptStr(params.newPassword);

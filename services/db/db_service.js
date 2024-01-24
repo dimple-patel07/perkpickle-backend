@@ -51,11 +51,12 @@ async function createUserTable() {
 		const sql = `CREATE TABLE IF NOT EXISTS users (
             id SERIAL,
             email VARCHAR(255) primary key,
-            name VARCHAR(255) not null,
-            zip_code INT not null,
+            first_name VARCHAR(255),
+            last_name VARCHAR(255),
+            zip_code INT,
             address VARCHAR(255),
-            phone_number VARCHAR(255) not null,
-            secret_key VARCHAR(255) not null,
+            phone_number VARCHAR(255),
+            secret_key VARCHAR(255),
             is_verified BOOLEAN DEFAULT false,
             otp INT,
             created_date timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -82,15 +83,9 @@ async function createUserTable() {
 // create new user
 function createUser(data) {
 	return new Promise(async (resolve) => {
-		const sql = `INSERT INTO users (email, name, zip_code, address, phone_number, secret_key, otp, is_verified) VALUES (
+		const sql = `INSERT INTO users (email, otp) VALUES (
             '${data.email}',
-            '${data.name}',
-            ${data.zip_code},
-            ${data.address ? `'${data.address}'` : null},
-            ${data.phone_number ? `'${data.phone_number}'` : null},
-            '${data.secret_key}',
-            ${data.otp ? data.otp : null},
-            ${data.is_verified ? true : false}
+            ${data.otp}
         )`;
 		const isConnected = await connectDb();
 		let isInserted = false;
@@ -111,15 +106,17 @@ function createUser(data) {
 	});
 }
 // update user
+// required fields for update operations - email, first-name, last-name, zip-code, secret-key(password)
 function updateUser(data) {
 	return new Promise(async (resolve) => {
 		const sql = `UPDATE users SET
             email = '${data.email}',
-            name = '${data.name}',
-            zip_code = ${data.zip_code},
+            first_name = ${data.first_name ? `'${data.first_name}'` : null},
+            last_name = ${data.last_name ? `'${data.last_name}'` : null},
+            zip_code = ${data.zip_code ? `'${data.zip_code}'` : null},
             address = ${data.address ? `'${data.address}'` : null},
-            phone_number = '${data.phone_number}',
-            secret_key = '${data.secret_key}',
+            phone_number = ${data.phone_number ? `'${data.phone_number}'` : null},
+            secret_key = ${data.secret_key ? `'${data.secret_key}'` : null},
             otp = ${data.otp ? data.otp : null},
             is_verified = ${data.is_verified},
             modified_date = NOW()

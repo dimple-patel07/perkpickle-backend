@@ -75,9 +75,19 @@ app.post("/verifyUser", async (req, res) => {
 	res.send(await userApi.verifyUser(req, res));
 });
 
+// resend otp
+app.post("/resendOtp", async (req, res) => {
+	res.send(await userApi.resendOtp(req, res));
+});
+
 // get user
 app.post("/getUserByEmail", async (req, res) => {
 	res.send(await userApi.getUserByEmail(req, res));
+});
+
+// update user
+app.post("/updateUser", async (req, res) => {
+	res.send(await userApi.updateUser(req, res));
 });
 
 // ----------------------- initial setup -----------------------

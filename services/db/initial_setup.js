@@ -1,4 +1,5 @@
 const dbService = require("./db_service");
+const commonUtils = require("../utils/common_utils");
 // only applicable for initial table setup
 async function setup(req, res) {
 	let msg;
@@ -8,20 +9,23 @@ async function setup(req, res) {
 		if (isCreated) {
 			const data = {
 				email: "help@perkpickle.com",
-				name: "perkpickle",
-				zip_code: 73301,
-				address: "Austin Tx",
-				phone_number: "1(512)555-3890",
-				secret_key: "cGVya3BpY2tsZUAxMjM", // 'perkpickle@123' - 'cGVya3BpY2tsZUAxMjM'
-				is_verified: false,
-				otp: Math.floor(Math.random() * 10),
+				otp: commonUtils.generateRandomNumber(),
 			};
 			const isCreated = await dbService.createUser(data);
 			if (isCreated) {
-				// update with verified tag
-				data.is_verified = true;
-				data.otp = null;
-				const isUpdated = await dbService.updateUser(data);
+				// expecting valid otp
+				const userData = await dbService.getUserByEmailAndOtp(data.email, data.otp);
+				if (userData && userData.email) {
+					userData.is_verified = true;
+					userData.otp = null;
+					userData.first_name = "perk";
+					userData.last_name = "pickle";
+					userData.zip_code = 73301;
+					userData.address = "Austin Tx";
+					userData.phone_number = "1(512)555-3890";
+					userData.secret_key = commonUtils.encryptStr("perkpickle@123"); // 'perkpickle@123' - 'cGVya3BpY2tsZUAxMjM'
+				}
+				const isUpdated = await dbService.updateUser(userData);
 				if (isUpdated) {
 					res.statusCode = 200;
 					msg = "setup successfully completed";

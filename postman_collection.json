@@ -119,36 +119,6 @@
 			"response": []
 		},
 		{
-			"name": "login",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"email\": \"test\", \"password\": \"test\"}"
-				},
-				"url": {
-					"raw": "http://localhost:3300/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3300",
-					"path": [
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "initialSetup",
 			"request": {
 				"method": "POST",
@@ -238,7 +208,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"email\":\"help@xyz.com\", \"name\": \"xyz\", \"zip_code\": 73201, \"address\": \"NY US\", \"phone_number\": \"1(123)555-3890\", \"password\": \"xyz@123\"}"
+					"raw": "{\"email\":\"help@xyz.com\"}"
 				},
 				"url": {
 					"raw": "http://localhost:3300/createUser",
@@ -358,7 +328,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsIm90cCI6NDM2OTMyLCJuZXdQYXNzd29yZCI6InBxckAxMjMifQ==\"}"
+					"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsIm5ld1Bhc3N3b3JkIjoieHl6QDEyMyJ9\"}"
 				},
 				"url": {
 					"raw": "http://localhost:3300/resetPassword",
@@ -399,6 +369,61 @@
 					"port": "3300",
 					"path": [
 						"changePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"help@xyz.com\", \"first_name\": \"xyz\", \"last_name\": \"xyz\", \"zip_code\": 73201, \"address\": \"NY US\", \"phone_number\": \"1(123)555-3890\", \"password\": \"xyz@123\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/updateUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"updateUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resendOtp",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"help@xyz.com\"}"
+				},
+				"url": {
+					"raw": "resendOtp",
+					"host": [
+						"resendOtp"
 					]
 				}
 			},
