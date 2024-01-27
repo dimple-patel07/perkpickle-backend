@@ -4,6 +4,7 @@ const commonUtils = require("../utils/common_utils");
 async function setup(req, res) {
 	let msg;
 	try {
+		console.log('setup started-----')
 		res.statusCode = 500;
 		const isCreated = await dbService.createUserTable();
 		if (isCreated) {

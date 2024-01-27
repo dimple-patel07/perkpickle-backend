@@ -2,6 +2,7 @@ const axios = require("axios");
 
 // get category groups
 async function spendBonusCategoryList(req, res) {
+	console.log('in----');
 	return await processRequest("creditcard-spendbonuscategory-categorylist");
 }
 // get group's categories
@@ -36,15 +37,21 @@ function processRequest(url) {
 				"X-RapidAPI-Host": process.env.X_RAPID_API_HOST,
 			},
 		};
+		console.log('options-----',options);
 		axios
 			.request(options)
 			.then((response) => {
+				console.log('success------------');
+				console.log('response-----',response.data?.length)
 				result = response.data;
 			})
 			.catch((error) => {
+				console.log('error--------');
 				console.error(error);
 			})
 			.finally(() => {
+				console.log('finaly---result---');
+				console.log(result?.length)
 				resolve(result);
 			});
 	});

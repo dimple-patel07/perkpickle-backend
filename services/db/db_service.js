@@ -5,13 +5,16 @@ function getClient() {
 	// expecting db with following credentials
 	// CREATE USER perkpickle WITH PASSWORD 'perkpickle123';
 	// CREATE DATABASE perkpickle_db OWNER perkpickle;
-	// $ psql -h localhost -d perkpickle_db -U perkpickle;
+	// psql -h localhost -d perkpickle_db -U perkpickle;
 
 	return new pg.Client({
+		connectionString: "postgres://zrevcxdyawmwtl:acaefedb172a538cbeb5522bc649f57dca6297c521a8ee095bf6e55284052c20@ec2-18-213-66-0.compute-1.amazonaws.com:5432/da5lk38arpdlid",
 		host: process.env.DB_HOST,
 		database: process.env.DB_NAME,
 		user: process.env.DB_OWNER,
 		password: process.env.DB_PASSWORD,
+		port: process.env.PGPORT || 5432,
+		ssl: false
 	});
 }
 // connect db
@@ -87,7 +90,9 @@ function createUser(data) {
             '${data.email}',
             ${data.otp}
         )`;
+		console.log('sql----',sql);
 		const isConnected = await connectDb();
+		console.log('is connected-----',isConnected)
 		let isInserted = false;
 		if (isConnected) {
 			client.query(sql, async (error, result) => {

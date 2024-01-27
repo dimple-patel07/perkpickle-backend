@@ -15,11 +15,15 @@ require("dotenv").config();
 const rapidApi = require("./api/card/rapid_api");
 const authApi = require("./api/auth/auth_api");
 const userApi = require("./api/user/user_api");
+const userMail = require("./mail/user_mail");
+
 
 const initialSetup = require("./services/db/initial_setup");
+console.log('process----env-------------',process.env)
 // ----------------------- card api -----------------------
 // Get Spend Bonus Category List
 app.get("/spendBonusCategoryList", async (req, res) => {
+	console.log('spend bonus category-------')
 	res.send(await rapidApi.spendBonusCategoryList(req, res));
 });
 
@@ -89,6 +93,12 @@ app.post("/getUserByEmail", async (req, res) => {
 app.post("/updateUser", async (req, res) => {
 	res.send(await userApi.updateUser(req, res));
 });
+// ----------------------- send email-----------------------
+// update user
+app.post("/sendUserEmail", async (req, res) => {
+	res.send(await userMail.sendUserEmail(req, res));
+});
+
 
 // ----------------------- initial setup -----------------------
 // setup
