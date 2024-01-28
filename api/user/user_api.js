@@ -1,5 +1,7 @@
-const dbService = require("../../services/db/db_service");
+const userDbService = require("../../services/db/user_db_service");
 const commonUtils = require("../../services/utils/common_utils");
+const userMailer = require("../../mailer/user_mailer");
+const authMailer = require("../../mailer/auth_mailer");
 
 // create user
 async function createUser(req, res) {
@@ -9,16 +11,19 @@ async function createUser(req, res) {
 		const params = req.body;
 		if (params && params.email) {
 			// required parameter - email
-			const data = await dbService.getUserByEmail(params.email);
+			const data = await userDbService.getUserByEmail(params.email);
 			if (data && data.email) {
 				result = { error: "email already exist" };
 			} else {
 				params.otp = commonUtils.generateRandomNumber();
-				const isCreated = await dbService.createUser(params);
+				const isCreated = await userDbService.createUser(params);
 				if (isCreated) {
+					// success
 					res.statusCode = 201;
 					delete params.secret_key;
-					result = { email: params.email, otp: params.otp };
+					result = { email: params.email, message: "otp sent successfully" };
+					// send email
+					userMailer.sendUserEmail(params.email, params.otp);
 				}
 			}
 		} else {
@@ -38,11 +43,11 @@ async function verifyUser(req, res) {
 		res.statusCode = 500;
 		if (params && params.email && params.otp) {
 			// required parameters - email, otp
-			const data = await dbService.getUserByEmailAndOtp(params.email, params.otp);
+			const data = await userDbService.getUserByEmailAndOtp(params.email, params.otp);
 			if (data) {
 				data.is_verified = true;
 				data.otp = null;
-				const isUpdated = await dbService.updateUser(data);
+				const isUpdated = await userDbService.updateUser(data);
 				if (isUpdated) {
 					res.statusCode = 200;
 					result = { email: params.email };
@@ -68,13 +73,13 @@ async function updateUser(req, res) {
 		res.statusCode = 500;
 		if (params && params.email) {
 			// required parameters - email, otp
-			const data = await dbService.getUserByEmail(params.email);
+			const data = await userDbService.getUserByEmail(params.email);
 			if (data) {
 				if (params.password) {
 					params.secret_key = commonUtils.encryptStr(params.password);
 				}
 				params.is_verified = data.is_verified;
-				const isUpdated = await dbService.updateUser(params);
+				const isUpdated = await userDbService.updateUser(params);
 				if (isUpdated) {
 					res.statusCode = 200;
 					result = { email: params.email };
@@ -100,7 +105,7 @@ async function getUserByEmailAndPassword(req, res) {
 		res.statusCode = 500;
 		if (params && params.email && params.password) {
 			// required parameters - email, password
-			const data = await dbService.getUserByEmailAndPassword(params.email, params.password);
+			const data = await userDbService.getUserByEmailAndPassword(params.email, params.password);
 			if (data) {
 				res.statusCode = 200;
 				delete data.secret_key;
@@ -126,7 +131,7 @@ async function getUserByEmail(req, res) {
 		res.statusCode = 500;
 		if (params && params.email) {
 			// required parameter - email
-			const data = await dbService.getUserByEmail(params.email);
+			const data = await userDbService.getUserByEmail(params.email);
 			if (data) {
 				res.statusCode = 200;
 				delete data.secret_key;
@@ -151,14 +156,21 @@ async function resendOtp(req, res) {
 		res.statusCode = 500;
 		if (params && params.email) {
 			// required parameter - email
-			const data = await dbService.getUserByEmail(params.email);
+			const data = await userDbService.getUserByEmail(params.email);
 			if (data) {
 				data.is_verified = false;
 				data.otp = commonUtils.generateRandomNumber();
-				const isUpdated = await dbService.updateUser(data);
+				const isUpdated = await userDbService.updateUser(data);
 				if (isUpdated) {
+					// success
 					res.statusCode = 200;
-					result = { email: data.email, otp: data.otp };
+					result = { email: data.email, message: "otp sent successfully" };
+					// send email
+					if (params.isUserCreation) {
+						userMailer.sendUserEmail(data.email, data.otp);
+					} else {
+						authMailer.sendForgotPasswordEmail(data.email, data.otp);
+					}
 				}
 			} else {
 				res.statusCode = 404;
@@ -173,28 +185,3 @@ async function resendOtp(req, res) {
 	}
 }
 module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp };
-
-// async function createUser(req, res) {
-// 	let result = null;
-// 	try {
-// 		res.statusCode = 500;
-// 		const params = req.body;
-// 		if (params && params.email && params.name && params.zip_code) {
-// 			// required parameters - email, name, zip_code
-// 			params.otp = commonUtils.generateRandomNumber();
-// 			params.secret_key = commonUtils.encryptStr(params.password);
-// 			const isCreated = await dbService.createUser({ ...params, ...{} });
-// 			if (isCreated) {
-// 				res.statusCode = 201;
-// 				delete params.secret_key;
-// 				result = { email: params.email, otp: params.otp };
-// 			}
-// 		} else {
-// 			res.statusCode = 400;
-// 		}
-// 	} catch (error) {
-// 		console.error("create user api failed :: ", error);
-// 	} finally {
-// 		return result;
-// 	}
-// }

@@ -1,5 +1,6 @@
-const dbService = require("../../services/db/db_service");
+const userDbService = require("../../services/db/user_db_service");
 const commonUtils = require("../../services/utils/common_utils");
+const authMailer = require("../../mailer/auth_mailer");
 // login
 async function login(req, res) {
 	let result = null;
@@ -11,7 +12,7 @@ async function login(req, res) {
 			if (params) {
 				params = JSON.parse(params);
 				if (params.email && params.password) {
-					const data = await dbService.getUserByEmailAndPassword(params.email, params.password);
+					const data = await userDbService.getUserByEmailAndPassword(params.email, params.password);
 					if (data && data.email) {
 						if (data.is_verified) {
 							// must be verified user
@@ -41,13 +42,16 @@ async function forgotPassword(req, res) {
 		res.statusCode = 500;
 		const email = req.body.email;
 		if (email) {
-			const data = await dbService.getUserByEmail(email);
+			const data = await userDbService.getUserByEmail(email);
 			if (data && data.email) {
 				data.otp = commonUtils.generateRandomNumber();
-				const isUpdated = await dbService.updateUser(data);
+				const isUpdated = await userDbService.updateUser(data);
 				if (isUpdated) {
-					result = { email: data.email, otp: data.otp };
+					// success
+					result = { email: data.email, message: "otp sent successfully" };
 					res.statusCode = 200;
+					// send email
+					authMailer.sendForgotPasswordEmail(data.email, data.otp);
 				}
 			} else {
 				res.statusCode = 404;
@@ -74,11 +78,11 @@ async function resetPassword(req, res) {
 				params = JSON.parse(params);
 				if (params && params.email && params.newPassword) {
 					// email, otp & new password required
-					const data = await dbService.getUserByEmail(params.email);
+					const data = await userDbService.getUserByEmail(params.email);
 					if (data && data.email) {
 						data.otp = null;
 						data.secret_key = commonUtils.encryptStr(params.newPassword);
-						const isUpdated = await dbService.updateUser(data);
+						const isUpdated = await userDbService.updateUser(data);
 						if (isUpdated) {
 							result = { email: data.email };
 							res.statusCode = 200;
@@ -107,11 +111,11 @@ async function changePassword(req, res) {
 				params = JSON.parse(params);
 				if (params && params.email && params.password && params.newPassword) {
 					// email, password & newPassword required
-					const data = await dbService.getUserByEmailAndPassword(params.email, params.password);
+					const data = await userDbService.getUserByEmailAndPassword(params.email, params.password);
 					if (data && data.email && data.is_verified) {
 						data.otp = null;
 						data.secret_key = commonUtils.encryptStr(params.newPassword);
-						const isUpdated = await dbService.updateUser(data);
+						const isUpdated = await userDbService.updateUser(data);
 						if (isUpdated) {
 							result = { email: data.email };
 							res.statusCode = 200;

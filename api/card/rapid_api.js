@@ -2,7 +2,6 @@ const axios = require("axios");
 
 // get category groups
 async function spendBonusCategoryList(req, res) {
-	console.log('in----');
 	return await processRequest("creditcard-spendbonuscategory-categorylist");
 }
 // get group's categories
@@ -20,7 +19,7 @@ async function getCardImage(req, res) {
 	const cardKey = req.body.cardKey;
 	return await processRequest(`creditcard-card-image/${cardKey}`);
 }
-// get all cards
+// get all cards from static json list
 function getAllCards(req, res) {
 	const cards = require("./card_list.json");
 	return cards;
@@ -37,23 +36,17 @@ function processRequest(url) {
 				"X-RapidAPI-Host": process.env.X_RAPID_API_HOST,
 			},
 		};
-		console.log('options-----',options);
 		axios
 			.request(options)
 			.then((response) => {
-				console.log('success------------');
-				console.log('response-----',response.data?.length)
 				result = response.data;
 			})
 			.catch((error) => {
-				console.log('error--------');
 				console.error(error);
 			})
 			.finally(() => {
-				console.log('finaly---result---');
-				console.log(result?.length)
 				resolve(result);
 			});
 	});
 }
-module.exports = { spendBonusCategoryList, spendBonusCategoryCard, cardDetailByCardKey, getCardImage, getAllCards };
+module.exports = { spendBonusCategoryList, spendBonusCategoryCard, cardDetailByCardKey, getCardImage, getAllCards, processRequest };

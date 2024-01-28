@@ -15,15 +15,13 @@ require("dotenv").config();
 const rapidApi = require("./api/card/rapid_api");
 const authApi = require("./api/auth/auth_api");
 const userApi = require("./api/user/user_api");
-const userMail = require("./mail/user_mail");
+const contactMailer = require("./mailer/contact_mailer");
+const cardApi = require("./api/card/card_api");
 
-
-const initialSetup = require("./services/db/initial_setup");
-console.log('process----env-------------',process.env)
+const initialDbSetup = require("./services/db/initial_db_service");
 // ----------------------- card api -----------------------
 // Get Spend Bonus Category List
 app.get("/spendBonusCategoryList", async (req, res) => {
-	console.log('spend bonus category-------')
 	res.send(await rapidApi.spendBonusCategoryList(req, res));
 });
 
@@ -42,9 +40,15 @@ app.post("/getCardImage", async (req, res) => {
 	res.send(await rapidApi.getCardImage(req, res));
 });
 
+// // get list of cards
+// app.get("/getAllCards", async (req, res) => {
+// 	res.send(rapidApi.getAllCards(req, res));
+// });
+
+// ----------------------- card api -----------------------
 // get list of cards
 app.get("/getAllCards", async (req, res) => {
-	res.send(rapidApi.getAllCards(req, res));
+	res.send(await cardApi.getAllCards(req, res));
 });
 
 // ----------------------- auth api -----------------------
@@ -94,15 +98,14 @@ app.post("/updateUser", async (req, res) => {
 	res.send(await userApi.updateUser(req, res));
 });
 // ----------------------- send email-----------------------
-// update user
-app.post("/sendUserEmail", async (req, res) => {
-	res.send(await userMail.sendUserEmail(req, res));
+// contact email
+app.post("/contactMail", async (req, res) => {
+	res.send(await contactMailer.sendContactMail(req, res));
 });
-
 
 // ----------------------- initial setup -----------------------
 // setup
 app.post("/initialSetup", async (req, res) => {
-	res.send(await initialSetup.setup(req, res));
+	res.send(await initialDbSetup.setup(req, res));
 });
-app.listen(process.env.PORT);
+app.listen(process.env.PORT); // 3300 port number only for local system - on heroku production set automatically from inbuilt heroku config(process.env.PORT)
