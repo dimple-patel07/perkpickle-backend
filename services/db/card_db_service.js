@@ -94,7 +94,6 @@ function updateCard(data) {
 function getAllCards() {
 	return new Promise(async (resolve) => {
 		const sql = `SELECT * from cards`;
-		console.log("sql----", sql);
 		const client = await dbService.connectDb();
 		let cardList = [];
 		if (client) {
@@ -103,7 +102,6 @@ function getAllCards() {
 					console.error("card selection error :: ", error);
 				} else if (result?.rows?.length > 0) {
 					cardList = result.rows;
-					console.log("cardlist ----", cardList.length);
 				}
 				await dbService.disConnectDb();
 				resolve(cardList);

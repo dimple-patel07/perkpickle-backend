@@ -16,11 +16,17 @@ async function login(req, res) {
 					if (data && data.email) {
 						if (data.is_verified) {
 							// must be verified user
+							let userName;
+							if (data.first_name && data.last_name) {
+								userName = `${data.first_name} ${data.last_name}`;
+							} else {
+								userName = data.email;
+							}
 							const str = JSON.stringify({ email: data.email, current_time: Date.now() });
-							result = { token: commonUtils.encryptStr(str) };
+							result = { token: commonUtils.encryptStr(str), userName };
 							res.statusCode = 200;
 						} else {
-							result = { error: "unverified user" };
+							result = { error: "email verification pending" };
 						}
 					} else {
 						res.statusCode = 500;
@@ -84,7 +90,7 @@ async function resetPassword(req, res) {
 						data.secret_key = commonUtils.encryptStr(params.newPassword);
 						const isUpdated = await userDbService.updateUser(data);
 						if (isUpdated) {
-							result = { email: data.email };
+							result = { email: data.email, message: "password updated successfully" };
 							res.statusCode = 200;
 						}
 					}

@@ -97,6 +97,11 @@ app.post("/getUserByEmail", async (req, res) => {
 app.post("/updateUser", async (req, res) => {
 	res.send(await userApi.updateUser(req, res));
 });
+// update user cards
+app.post("/updateUserCards", async (req, res) => {
+	res.send(await userApi.updateUserCards(req, res));
+});
+
 // ----------------------- send email-----------------------
 // contact email
 app.post("/contactMail", async (req, res) => {

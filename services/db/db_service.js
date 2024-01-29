@@ -5,9 +5,8 @@ function getClient() {
 	// CREATE USER perkpickle WITH PASSWORD 'perkpickle123';
 	// CREATE DATABASE perkpickle_db OWNER perkpickle;
 	// psql -h localhost -d perkpickle_db -U perkpickle;
-	console.log("----databaseurl---", process.env.DATABASE_URL);
 	return new pg.Client({
-		connectionString: process.env.DATABASE_URL,
+		connectionString: process.env.DATABASE_URL, // required on heroku
 		// either connectionString or below credentials
 		// host: process.env.DB_HOST,
 		// database: process.env.DB_NAME,

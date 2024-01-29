@@ -75,14 +75,15 @@ async function updateUser(req, res) {
 			// required parameters - email, otp
 			const data = await userDbService.getUserByEmail(params.email);
 			if (data) {
-				if (params.password) {
-					params.secret_key = commonUtils.encryptStr(params.password);
+				params.is_verified = params.is_verified ? params.is_verified : data.is_verified; // it is only updated by verify email / explicit value
+				if (!params.secret_key) {
+					// applicable on profile updated
+					params.secret_key = data.secret_key;
 				}
-				params.is_verified = data.is_verified;
 				const isUpdated = await userDbService.updateUser(params);
 				if (isUpdated) {
 					res.statusCode = 200;
-					result = { email: params.email };
+					result = { email: params.email, message: "user updated successfully" };
 				}
 			} else {
 				res.statusCode = 404;
@@ -135,6 +136,7 @@ async function getUserByEmail(req, res) {
 			if (data) {
 				res.statusCode = 200;
 				delete data.secret_key;
+				delete data.otp;
 				result = data;
 			} else {
 				res.statusCode = 404;
@@ -184,4 +186,34 @@ async function resendOtp(req, res) {
 		return result;
 	}
 }
-module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp };
+// update user cards
+async function updateUserCards(req, res) {
+	let result = null;
+	try {
+		const params = req.body;
+		res.statusCode = 500;
+		if (params && params.email) {
+			// required parameters - email, otp
+			const data = await userDbService.getUserByEmail(params.email);
+			if (data) {
+				data.card_keys = params.cardKeys;
+				const isUpdated = await userDbService.updateUser(data);
+				if (isUpdated) {
+					res.statusCode = 200;
+					result = { email: data.email };
+				} else {
+					console.error("update user cards failed");
+				}
+			} else {
+				res.statusCode = 404;
+			}
+		} else {
+			res.statusCode = 400;
+		}
+	} catch (error) {
+		console.error("update user cards api failed :: ", error);
+	} finally {
+		return result;
+	}
+}
+module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards };
