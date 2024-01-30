@@ -34,6 +34,7 @@ async function setup(req, res) {
 							userData.zip_code = 73301;
 							userData.address = "Austin Tx";
 							userData.phone_number = "1(512)555-3890";
+							userData.is_signup_completed = true;
 							userData.secret_key = commonUtils.encryptStr("perkpickle@123"); // 'perkpickle@123' - 'cGVya3BpY2tsZUAxMjM'
 						}
 						let isUpdated = await userDbService.updateUser(userData);
