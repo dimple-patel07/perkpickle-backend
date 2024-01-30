@@ -12,15 +12,30 @@ async function createUser(req, res) {
 		if (params && params.email) {
 			// required parameter - email
 			const data = await userDbService.getUserByEmail(params.email);
-			if (data && data.email) {
+			if (data && data.email && data.is_signup_completed) {
+				// email already exist
 				result = { error: "email already exist" };
+			} else if (data && data.email && data.is_verified) {
+				// user is verified but signup process pending
+				res.statusCode = 200;
+				result = { is_signup_completed: false, is_verified: true, message: "user is verified but signup process pending" };
+			} else if (data && data.email) {
+				// only email added but verification & signup process pending
+				params.otp = commonUtils.generateRandomNumber();
+				const isUpdated = await userDbService.updateUser(params);
+				if (isUpdated) {
+					// success
+					res.statusCode = 200;
+					result = { is_signup_completed: false, message: "otp sent successfully" };
+					// send email
+					userMailer.sendUserEmail(params.email, params.otp);
+				}
 			} else {
 				params.otp = commonUtils.generateRandomNumber();
 				const isCreated = await userDbService.createUser(params);
 				if (isCreated) {
 					// success
 					res.statusCode = 201;
-					delete params.secret_key;
 					result = { email: params.email, message: "otp sent successfully" };
 					// send email
 					userMailer.sendUserEmail(params.email, params.otp);
@@ -79,6 +94,10 @@ async function updateUser(req, res) {
 				if (!params.secret_key) {
 					// applicable on profile updated
 					params.secret_key = data.secret_key;
+				}
+				if (params.is_signup_completed === undefined) {
+					// is_signup_completed only update once while signup form submitted
+					params.is_signup_completed = data.is_signup_completed;
 				}
 				const isUpdated = await userDbService.updateUser(params);
 				if (isUpdated) {

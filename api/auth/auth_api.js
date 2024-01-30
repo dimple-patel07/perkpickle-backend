@@ -16,16 +16,23 @@ async function login(req, res) {
 					if (data && data.email) {
 						if (data.is_verified) {
 							// must be verified user
-							let userName;
-							if (data.first_name && data.last_name) {
-								userName = `${data.first_name} ${data.last_name}`;
+							if (data.is_signup_completed) {
+								// must be signup process completed
+								let userName;
+								if (data.first_name && data.last_name) {
+									userName = `${data.first_name} ${data.last_name}`;
+								} else {
+									userName = data.email;
+								}
+								const str = JSON.stringify({ email: data.email, current_time: Date.now() });
+								result = { token: commonUtils.encryptStr(str), userName };
+								res.statusCode = 200;
 							} else {
-								userName = data.email;
+								// signup process pending
+								result = { error: "user is not registered" };
 							}
-							const str = JSON.stringify({ email: data.email, current_time: Date.now() });
-							result = { token: commonUtils.encryptStr(str), userName };
-							res.statusCode = 200;
 						} else {
+							// email verification pending
 							result = { error: "email verification pending" };
 						}
 					} else {
@@ -50,14 +57,19 @@ async function forgotPassword(req, res) {
 		if (email) {
 			const data = await userDbService.getUserByEmail(email);
 			if (data && data.email) {
-				data.otp = commonUtils.generateRandomNumber();
-				const isUpdated = await userDbService.updateUser(data);
-				if (isUpdated) {
-					// success
-					result = { email: data.email, message: "otp sent successfully" };
-					res.statusCode = 200;
-					// send email
-					authMailer.sendForgotPasswordEmail(data.email, data.otp);
+				if (data.is_signup_completed) {
+					data.otp = commonUtils.generateRandomNumber();
+					const isUpdated = await userDbService.updateUser(data);
+					if (isUpdated) {
+						// success
+						result = { email: data.email, message: "otp sent successfully" };
+						res.statusCode = 200;
+						// send email
+						authMailer.sendForgotPasswordEmail(data.email, data.otp);
+					}
+				} else {
+					// signup process pending
+					result = { error: "user is not registered" };
 				}
 			} else {
 				res.statusCode = 404;

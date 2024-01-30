@@ -14,6 +14,7 @@ async function createUserTable() {
             phone_number VARCHAR(255),
             secret_key VARCHAR(255),
             is_verified BOOLEAN DEFAULT false,
+            is_signup_completed BOOLEAN DEFAULT false,
             otp INT,
             card_keys TEXT,
             created_date timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -76,7 +77,8 @@ function updateUser(data) {
             secret_key = ${data.secret_key ? `'${data.secret_key}'` : null},
             card_keys = ${data.card_keys ? `'${data.card_keys}'` : null},
             otp = ${data.otp ? data.otp : null},
-            is_verified = ${data.is_verified},
+            is_verified = ${data.is_verified ? data.is_verified : false},
+            is_signup_completed = ${data.is_signup_completed ? data.is_signup_completed : false},
             modified_date = NOW()
             WHERE email = '${data.email}'
         `;
