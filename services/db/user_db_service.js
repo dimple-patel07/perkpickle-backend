@@ -164,4 +164,46 @@ function getUserByEmailAndPassword(email, password) {
 		}
 	});
 }
-module.exports = { createUser, updateUser, getUserByEmailAndOtp, getUserByEmail, createUserTable, getUserByEmailAndPassword };
+// get all users
+function getAllUsers() {
+	return new Promise(async (resolve) => {
+		const sql = `SELECT * from users`;
+		const client = await dbService.connectDb();
+		let found = null;
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("all user selection error :: ", error);
+				} else if (result?.rows?.length > 0) {
+					found = result.rows;
+				}
+				await dbService.disConnectDb();
+				resolve(found);
+			});
+		} else {
+			resolve(found);
+		}
+	});
+}
+// delete user
+function deleteUser(email) {
+	return new Promise(async (resolve) => {
+		const sql = `DELETE from users where email = '${email}'`;
+		const client = await dbService.connectDb();
+		let isDeleted = false;
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("user deletion error :: ", error);
+				} else if (result?.rowCount) {
+					isDeleted = true;
+				}
+				await dbService.disConnectDb();
+				resolve(isDeleted);
+			});
+		} else {
+			resolve(isDeleted);
+		}
+	});
+}
+module.exports = { createUser, updateUser, getUserByEmailAndOtp, getUserByEmail, createUserTable, getUserByEmailAndPassword, getAllUsers, deleteUser };

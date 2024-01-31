@@ -5,6 +5,7 @@ const rapidApi = require("../../api/card/rapid_api");
 
 // only applicable for initial table setup
 async function setup(req, res) {
+	console.log("----------------initial setup started----------------");
 	let msg;
 	try {
 		res.statusCode = 500;
@@ -59,6 +60,7 @@ async function setup(req, res) {
 		if (!msg) {
 			msg = "setup failed";
 		}
+		console.log("----------------initial setup completed----------------");
 		return msg;
 	}
 }

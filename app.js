@@ -45,10 +45,25 @@ app.post("/getCardImage", async (req, res) => {
 // 	res.send(rapidApi.getAllCards(req, res));
 // });
 
-// ----------------------- card api -----------------------
 // get list of cards
 app.get("/getAllCards", async (req, res) => {
 	res.send(await cardApi.getAllCards(req, res));
+});
+
+app.post("/getCardByCardKey", async (req, res) => {
+	res.send(await cardApi.getCardByCardKey(req, res));
+});
+
+app.post("/createCard", async (req, res) => {
+	res.send(await cardApi.createCard(req, res));
+});
+
+app.post("/updateCard", async (req, res) => {
+	res.send(await cardApi.updateCard(req, res));
+});
+
+app.post("/deleteCard", async (req, res) => {
+	res.send(await cardApi.deleteCard(req, res));
 });
 
 // ----------------------- auth api -----------------------
@@ -97,9 +112,20 @@ app.post("/getUserByEmail", async (req, res) => {
 app.post("/updateUser", async (req, res) => {
 	res.send(await userApi.updateUser(req, res));
 });
+
+// delete user
+app.post("/deleteUser", async (req, res) => {
+	res.send(await userApi.deleteUser(req, res));
+});
+
 // update user cards
 app.post("/updateUserCards", async (req, res) => {
 	res.send(await userApi.updateUserCards(req, res));
+});
+
+// get all users
+app.post("/getAllUsers", async (req, res) => {
+	res.send(await userApi.getAllUsers(req, res));
 });
 
 // ----------------------- send email-----------------------

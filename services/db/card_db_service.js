@@ -41,7 +41,6 @@ function createCard(data) {
             '${data.card_image_url}',
             ${data.is_disabled ? data.is_disabled : false}
         )`;
-		console.log("data-------", data);
 		const client = await dbService.connectDb();
 		let isInserted = false;
 		if (client) {
@@ -68,10 +67,9 @@ function updateCard(data) {
             card_name = '${data.card_name}',
             card_issuer = '${data.card_issuer}',
             card_image_url = '${data.card_image_url}',
-            is_disabled = ${data.is_disabled ? data.is_disabled : false}
+            is_disabled = ${data.is_disabled ? data.is_disabled : false},
             modified_date = NOW()
             WHERE card_key = '${data.card_key}'`;
-		console.log("data-------", data);
 		const client = await dbService.connectDb();
 		let isUpdated = false;
 		if (client) {
@@ -132,4 +130,27 @@ function getCardByCardKey(cardKey) {
 		}
 	});
 }
-module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey };
+// delete card
+function deleteCard(cardKey) {
+	return new Promise(async (resolve) => {
+		const sql = `DELETE from cards
+            WHERE card_key = '${cardKey}'`;
+		const client = await dbService.connectDb();
+		let isDeleted = false;
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("card deletion error :: ", error);
+				} else if (result?.rowCount) {
+					isDeleted = true;
+					console.log("card deleted successfully");
+				}
+				await dbService.disConnectDb();
+				resolve(isDeleted);
+			});
+		} else {
+			resolve(isDeleted);
+		}
+	});
+}
+module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey, deleteCard };

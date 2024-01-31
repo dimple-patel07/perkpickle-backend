@@ -7,8 +7,8 @@ async function createCard(req, res) {
 	try {
 		res.statusCode = 500;
 		const params = req.body;
-		if (params && params.card_key) {
-			// required parameters - card_key, card_name, card_issuer
+		if (params && params.card_key && params.card_name && params.card_issuer && params.card_image_url) {
+			// required parameters - card_key, card_name, card_issuer,card_image_url
 			const data = await cardDbService.getCardByCardKey(params.card_key);
 			if (data && data.card_key) {
 				result = { error: "card already exist" };
@@ -17,6 +17,7 @@ async function createCard(req, res) {
 				if (isCreated) {
 					// success
 					res.statusCode = 201;
+					result = { card_key: params.card_key, message: "card created successfully" };
 				}
 			}
 		} else {
@@ -35,13 +36,13 @@ async function updateCard(req, res) {
 		const params = req.body;
 		res.statusCode = 500;
 		if (params && params.card_key) {
-			// required parameters - card_key, card_name, card_issuer
+			// required parameters - card_key
 			const data = await cardDbService.getCardByCardKey(params.card_key);
 			if (data) {
 				const isUpdated = await cardDbService.updateCard(params);
 				if (isUpdated) {
 					res.statusCode = 200;
-					result = { card_key: params.card_key };
+					result = { card_key: data.card_key, message: "card updated successfully" };
 				}
 			} else {
 				res.statusCode = 404;
@@ -68,15 +69,52 @@ async function getAllCards(req, res) {
 	}
 }
 // get card by card key
-async function getCardByCardKey() {
+async function getCardByCardKey(req, res) {
 	let card = null;
 	try {
-		card = await cardDbService.getCardByCardKey();
+		const params = req.body;
+		res.statusCode = 500;
+		if (params && params.card_key) {
+			// required parameters - card_key
+			const data = await cardDbService.getCardByCardKey(params.card_key);
+			if (data?.card_key) {
+				card = data;
+				res.statusCode = 200;
+			} else {
+				res.statusCode = 404;
+			}
+		}
 	} catch (error) {
 		console.error("get card by card key error :: ", error);
 	} finally {
 		return card;
 	}
 }
-
-module.exports = { getAllCards, createCard, updateCard, getCardByCardKey };
+// delete card
+async function deleteCard(req, res) {
+	let result = null;
+	try {
+		const params = req.body;
+		res.statusCode = 500;
+		if (params && params.card_key) {
+			// required parameters - card_key,
+			const data = await cardDbService.getCardByCardKey(params.card_key);
+			if (data) {
+				const isDeleted = await cardDbService.deleteCard(data.card_key);
+				if (isDeleted) {
+					res.statusCode = 200;
+					result = { card_key: data.card_key, message: "card deleted successfully" };
+				}
+			} else {
+				res.statusCode = 404;
+			}
+		} else {
+			res.statusCode = 400;
+		}
+	} catch (error) {
+		console.error("delete card api failed :: ", error);
+	} finally {
+		return result;
+	}
+}
+module.exports = { getAllCards, createCard, updateCard, getCardByCardKey, deleteCard };

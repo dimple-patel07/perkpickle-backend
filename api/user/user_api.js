@@ -87,7 +87,7 @@ async function updateUser(req, res) {
 		const params = req.body;
 		res.statusCode = 500;
 		if (params && params.email) {
-			// required parameters - email, otp
+			// required parameters - email
 			const data = await userDbService.getUserByEmail(params.email);
 			if (data) {
 				params.is_verified = params.is_verified ? params.is_verified : data.is_verified; // it is only updated by verify email / explicit value
@@ -179,7 +179,6 @@ async function resendOtp(req, res) {
 			// required parameter - email
 			const data = await userDbService.getUserByEmail(params.email);
 			if (data) {
-				data.is_verified = false;
 				data.otp = commonUtils.generateRandomNumber();
 				const isUpdated = await userDbService.updateUser(data);
 				if (isUpdated) {
@@ -212,7 +211,7 @@ async function updateUserCards(req, res) {
 		const params = req.body;
 		res.statusCode = 500;
 		if (params && params.email) {
-			// required parameters - email, otp
+			// required parameters - email
 			const data = await userDbService.getUserByEmail(params.email);
 			if (data) {
 				data.card_keys = params.cardKeys;
@@ -235,4 +234,53 @@ async function updateUserCards(req, res) {
 		return result;
 	}
 }
-module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards };
+// get all users
+async function getAllUsers(req, res) {
+	let result = [];
+	try {
+		res.statusCode = 500;
+		const users = await userDbService.getAllUsers();
+		if (users?.length > 0) {
+			res.statusCode = 200;
+			for (const user of users) {
+				delete user.secret_key;
+				delete user.otp;
+			}
+		}
+		result = users;
+	} catch (error) {
+		console.error("get all user api :: ", error);
+	} finally {
+		return result;
+	}
+}
+// delete user
+async function deleteUser(req, res) {
+	let result = null;
+	try {
+		const params = req.body;
+		res.statusCode = 500;
+		if (params && params.email) {
+			// required parameters - email
+			console.log("email---", params.email);
+			const data = await userDbService.getUserByEmail(params.email);
+			if (data && data.email) {
+				console.log("in---");
+				const isDeleted = await userDbService.deleteUser(params.email);
+				if (isDeleted) {
+					res.statusCode = 200;
+					result = { email: params.email, message: "user deleted successfully" };
+				}
+			} else {
+				res.statusCode = 404;
+			}
+		} else {
+			res.statusCode = 400;
+		}
+	} catch (error) {
+		console.error("update user api failed :: ", error);
+	} finally {
+		return result;
+	}
+}
+module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser };

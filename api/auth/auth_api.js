@@ -97,12 +97,12 @@ async function resetPassword(req, res) {
 				if (params && params.email && params.newPassword) {
 					// email, otp & new password required
 					const data = await userDbService.getUserByEmail(params.email);
-					if (data && data.email) {
-						data.otp = null;
+					if (data && data.email && !data.otp) {
+						// data.otp blank - otp should be verified;
 						data.secret_key = commonUtils.encryptStr(params.newPassword);
 						const isUpdated = await userDbService.updateUser(data);
 						if (isUpdated) {
-							result = { email: data.email, message: "password updated successfully" };
+							result = { email: data.email, message: "password reset successfully" };
 							res.statusCode = 200;
 						}
 					}
@@ -135,7 +135,7 @@ async function changePassword(req, res) {
 						data.secret_key = commonUtils.encryptStr(params.newPassword);
 						const isUpdated = await userDbService.updateUser(data);
 						if (isUpdated) {
-							result = { email: data.email };
+							result = { email: data.email, message: "password changed successfully" };
 							res.statusCode = 200;
 						}
 					}

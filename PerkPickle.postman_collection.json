@@ -388,7 +388,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"email\":\"help@xyz.com\", \"first_name\": \"xyz\", \"last_name\": \"xyz\", \"zip_code\": 73201, \"address\": \"NY US\", \"phone_number\": \"1(123)555-3890\", \"password\": \"xyz@123\"}"
+					"raw": "{\"email\":\"help@xyz.com\", \"first_name\": \"abc\", \"last_name\": \"xyz\", \"zip_code\": 73201, \"address\": \"NY US\", \"phone_number\": \"1(123)555-3890\", \"secret_key\": \"WHl6QDEyMzQ=\", \"is_signup_completed\": true, \"card_keys\": \"boa-alaska,boa-biz-alaska\"}"
 				},
 				"url": {
 					"raw": "http://localhost:3300/updateUser",
@@ -424,6 +424,53 @@
 					"raw": "resendOtp",
 					"host": [
 						"resendOtp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "heroku-getAllCards",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://perk-pickle-7c87ea004712.herokuapp.com/getAllCards",
+					"protocol": "https",
+					"host": [
+						"perk-pickle-7c87ea004712",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"getAllCards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUsers",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3300/getAllUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"getAllUsers"
 					]
 				}
 			},
