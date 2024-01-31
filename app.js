@@ -21,7 +21,7 @@ const cardApi = require("./api/card/card_api");
 const initialDbSetup = require("./services/db/initial_db_service");
 // ----------------------- card api -----------------------
 // Get Spend Bonus Category List
-app.get("/spendBonusCategoryList", async (req, res) => {
+app.post("/spendBonusCategoryList", async (req, res) => {
 	res.send(await rapidApi.spendBonusCategoryList(req, res));
 });
 
@@ -46,7 +46,7 @@ app.post("/getCardImage", async (req, res) => {
 // });
 
 // get list of cards
-app.get("/getAllCards", async (req, res) => {
+app.post("/getAllCards", async (req, res) => {
 	res.send(await cardApi.getAllCards(req, res));
 });
 
