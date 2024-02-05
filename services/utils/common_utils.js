@@ -30,7 +30,6 @@ function validateToken(token) {
 			const diff = Date.now() - data.issue_time;
 			// const minutes = Math.floor(diff / 1000 / 60) % 60;
 			const hours = Math.ceil(diff / 1000 / 60 / 60);
-			console.log("hours----", hours);
 			if (hours <= 24) {
 				isVerified = true;
 			}
