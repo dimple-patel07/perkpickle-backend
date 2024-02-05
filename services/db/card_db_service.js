@@ -130,6 +130,27 @@ function getCardByCardKey(cardKey) {
 		}
 	});
 }
+// get list of cards
+function getListOfCards(cardKeys) {
+	return new Promise(async (resolve) => {
+		const sql = `SELECT * from cards where card_key in(${cardKeys})`;
+		const client = await dbService.connectDb();
+		let cardList = [];
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("card selection error :: ", error);
+				} else if (result?.rows?.length > 0) {
+					cardList = result.rows;
+				}
+				await dbService.disConnectDb();
+				resolve(cardList);
+			});
+		} else {
+			resolve(cardList);
+		}
+	});
+}
 // delete card
 function deleteCard(cardKey) {
 	return new Promise(async (resolve) => {
@@ -153,4 +174,4 @@ function deleteCard(cardKey) {
 		}
 	});
 }
-module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey, deleteCard };
+module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey, deleteCard, getListOfCards };

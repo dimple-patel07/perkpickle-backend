@@ -24,8 +24,7 @@ async function login(req, res) {
 								} else {
 									userName = data.email;
 								}
-								const str = JSON.stringify({ email: data.email, current_time: Date.now() });
-								result = { token: commonUtils.encryptStr(str), userName };
+								result = { token: commonUtils.generateToken(data.email), email: data.email, userName };
 								res.statusCode = 200;
 							} else {
 								// signup process pending
@@ -121,9 +120,9 @@ async function resetPassword(req, res) {
 async function changePassword(req, res) {
 	let result = null;
 	try {
-		res.statusCode = 500;
 		const key = req.body.key;
 		if (key) {
+			res.statusCode = 500;
 			let params = commonUtils.decryptStr(key);
 			if (params) {
 				params = JSON.parse(params);
@@ -138,6 +137,8 @@ async function changePassword(req, res) {
 							result = { email: data.email, message: "password changed successfully" };
 							res.statusCode = 200;
 						}
+					} else {
+						result = { error: "invalid current password" };
 					}
 				}
 			}

@@ -1,4 +1,5 @@
 const userDbService = require("../../services/db/user_db_service");
+const cardDbService = require("../../services/db/card_db_service");
 const commonUtils = require("../../services/utils/common_utils");
 const userMailer = require("../../mailer/user_mailer");
 const authMailer = require("../../mailer/auth_mailer");
@@ -218,7 +219,7 @@ async function updateUserCards(req, res) {
 				const isUpdated = await userDbService.updateUser(data);
 				if (isUpdated) {
 					res.statusCode = 200;
-					result = { email: data.email };
+					result = { email: data.email, message: "card associated successfully" };
 				} else {
 					console.error("update user cards failed");
 				}
@@ -262,10 +263,8 @@ async function deleteUser(req, res) {
 		res.statusCode = 500;
 		if (params && params.email) {
 			// required parameters - email
-			console.log("email---", params.email);
 			const data = await userDbService.getUserByEmail(params.email);
 			if (data && data.email) {
-				console.log("in---");
 				const isDeleted = await userDbService.deleteUser(params.email);
 				if (isDeleted) {
 					res.statusCode = 200;
@@ -283,4 +282,40 @@ async function deleteUser(req, res) {
 		return result;
 	}
 }
-module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser };
+// get user with associated cards
+async function getUserWithAssociatedCards(req, res) {
+	let result = null;
+	try {
+		const params = req.body;
+		res.statusCode = 500;
+		if (params && params.email) {
+			// required parameter - email
+			const data = await userDbService.getUserByEmail(params.email);
+			if (data) {
+				res.statusCode = 200;
+				delete data.secret_key;
+				delete data.otp;
+				if (data.card_keys) {
+					const cardKeyList = data.card_keys.split(",");
+					let strCardKeys = "";
+					// construct card keys
+					for (let index = 0; index < cardKeyList.length; index++) {
+						strCardKeys = strCardKeys + `'${cardKeyList[index]}'${index === cardKeyList.length - 1 ? "" : ","}`;
+					}
+					// get cards for constructed list
+					data.userCards = await cardDbService.getListOfCards(strCardKeys);
+				}
+				result = data;
+			} else {
+				res.statusCode = 404;
+			}
+		} else {
+			res.statusCode = 400;
+		}
+	} catch (error) {
+		console.error("get user with associated cards api failed :: ", error);
+	} finally {
+		return result;
+	}
+}
+module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards };

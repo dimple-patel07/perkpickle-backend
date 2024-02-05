@@ -1,24 +1,22 @@
 const express = require("express");
-const app = express();
-app.use(express.json()); //Add it first then others follw
-app.use(function (req, res, next) {
-	res.setHeader("Access-Control-Allow-Origin", "*");
-	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-	res.setHeader("Access-Control-Allow-Credentials", true);
-	next();
-});
-
-app.use(express.urlencoded({ extended: true }));
-require("dotenv").config();
-
+const cors = require("cors");
 const rapidApi = require("./api/card/rapid_api");
 const authApi = require("./api/auth/auth_api");
 const userApi = require("./api/user/user_api");
 const contactMailer = require("./mailer/contact_mailer");
 const cardApi = require("./api/card/card_api");
-
 const initialDbSetup = require("./services/db/initial_db_service");
+const { handleApiRequest } = require("./services/utils/common_utils");
+require("dotenv").config();
+
+const app = express();
+app.use(express.json()); //Add it first then others
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+	handleApiRequest(req, res, next);
+});
+
 // ----------------------- card api -----------------------
 // Get Spend Bonus Category List
 app.post("/spendBonusCategoryList", async (req, res) => {
@@ -88,7 +86,12 @@ app.post("/changePassword", async (req, res) => {
 });
 
 // ----------------------- user api -----------------------
-// create user
+// new user signup - create new user from client
+app.post("/newUserSignup", async (req, res) => {
+	res.send(await userApi.createUser(req, res));
+});
+
+// create user from admin app
 app.post("/createUser", async (req, res) => {
 	res.send(await userApi.createUser(req, res));
 });
@@ -106,6 +109,11 @@ app.post("/resendOtp", async (req, res) => {
 // get user
 app.post("/getUserByEmail", async (req, res) => {
 	res.send(await userApi.getUserByEmail(req, res));
+});
+
+// complete user signup
+app.post("/completeUserSignup", async (req, res) => {
+	res.send(await userApi.updateUser(req, res));
 });
 
 // update user
@@ -126,6 +134,11 @@ app.post("/updateUserCards", async (req, res) => {
 // get all users
 app.post("/getAllUsers", async (req, res) => {
 	res.send(await userApi.getAllUsers(req, res));
+});
+
+// get user with associated cards
+app.post("/getUserWithAssociatedCards", async (req, res) => {
+	res.send(await userApi.getUserWithAssociatedCards(req, res));
 });
 
 // ----------------------- send email-----------------------
