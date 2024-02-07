@@ -5,9 +5,9 @@ function sendContactMail(req, res) {
 	const subject = "Contact details";
 	const htmlTemplate = contactEmailTemplate(params);
 
-	mailerConfig(process.env.MAILER_EMAIL, subject, htmlTemplate);
+	mailerConfig(process.env.CONTACT_US_EMAIL, subject, htmlTemplate);
 	res.statusCode = 200;
-	return { message: "contact email sent successfully" };
+	return { message: "message sent successfully" };
 }
 
 function contactEmailTemplate(params) {
