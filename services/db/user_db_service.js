@@ -9,7 +9,7 @@ async function createUserTable() {
             email VARCHAR(255) primary key,
             first_name VARCHAR(255),
             last_name VARCHAR(255),
-            zip_code INT,
+            zip_code VARCHAR(255),
             address VARCHAR(255),
             phone_number VARCHAR(255),
             secret_key VARCHAR(255),
