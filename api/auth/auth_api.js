@@ -64,7 +64,7 @@ async function forgotPassword(req, res) {
 						result = { email: data.email, message: "otp sent successfully" };
 						res.statusCode = 200;
 						// send email
-						authMailer.sendForgotPasswordEmail(data.email, data.otp);
+						authMailer.sendForgotPasswordEmail(data);
 					}
 				} else {
 					// signup process pending

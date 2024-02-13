@@ -190,7 +190,7 @@ async function resendOtp(req, res) {
 					if (params.isUserCreation) {
 						userMailer.sendUserEmail(data.email, data.otp);
 					} else {
-						authMailer.sendForgotPasswordEmail(data.email, data.otp);
+						authMailer.sendForgotPasswordEmail(data);
 					}
 				}
 			} else {
