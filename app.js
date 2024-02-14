@@ -152,4 +152,11 @@ app.post("/contactMail", async (req, res) => {
 app.post("/initialSetup", async (req, res) => {
 	res.send(await initialDbSetup.setup(req, res));
 });
+
+// ----------------------- Card List With pagination -----------------------
+app.post("/findAllCards", async (req, res) => {
+	res.send(await cardApi.findAllCards(req, res));
+});
 app.listen(process.env.PORT); // 3300 port number only for local system - on heroku production set automatically from inbuilt heroku config(process.env.PORT)
+
+

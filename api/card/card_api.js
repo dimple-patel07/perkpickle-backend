@@ -117,4 +117,16 @@ async function deleteCard(req, res) {
 		return result;
 	}
 }
-module.exports = { getAllCards, createCard, updateCard, getCardByCardKey, deleteCard };
+
+async function findAllCards(req, res){
+	let cards = [];
+	try {
+		cards = await cardDbService.findAllCards(req);
+		res.statusCode = 200;
+	} catch (error) {
+		console.error("get all cards api failed :: ", error);
+	} finally {
+		return cards;
+	}
+}
+module.exports = { getAllCards, createCard, updateCard, getCardByCardKey, deleteCard, findAllCards };

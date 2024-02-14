@@ -174,4 +174,62 @@ function deleteCard(cardKey) {
 		}
 	});
 }
-module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey, deleteCard, getListOfCards };
+
+function findAllCards(req){
+	return new Promise(async (resolve) => {
+		let page = parseInt(req.body.pageNumber);
+		let limit = parseInt(req.body.pageSize);	  
+		let sortby = (req.body.sortBy);
+		let sortorder = (req.body.sortOrder);
+		let search = (req.body.search);
+		const offset = page ? (page - 1) * limit : 0;
+
+	const sql = `SELECT count(*) as total from cards where card_key like '%${search}%' OR card_name like '%${search}%' OR card_name like '%${search}%' OR card_issuer like '%${search}%'`;
+	const client = await dbService.connectDb();
+	
+	let cardList = [];
+	let count = 0;
+	let dataRes = {
+		totalCount :0,
+		pageNumber: page,
+		pageSize:limit,
+		sortBy:sortby,
+		sortOrder:sortorder,
+		search:search,
+		data:[]};
+		if (client) {
+			client.query(sql, async (error, result) => {
+				count = result.rows[0].total;
+				console.log(count);
+				if (error) {
+					console.error("card selection error :: ", error);
+				} else {
+				const sql2 = `SELECT * from cards where card_key like '%${search}%' OR card_name like '%${search}%' OR card_name like '%${search}%' OR card_issuer like '%${search}%' ORDER BY ${sortby} ${sortorder} limit ${limit} offset ${offset}`;
+				 client.query(sql2, async (error, resultData) => {
+					if (error) {
+						console.error("card selection error :: ", error);
+					}
+					if (resultData?.rows?.length > 0){
+						cardList = resultData.rows;
+						dataRes = {
+							totalCount:parseInt(count),
+							pageNumber: page,
+							pageSize:limit,
+							sortBy:sortby,
+							sortOrder:sortorder,
+							search:search,
+							data : resultData.rows
+						};
+					}
+						await dbService.disConnectDb();
+						resolve(dataRes);
+				})
+				}
+				
+			});
+		} else {
+			resolve(dataRes);
+		}
+	});
+}
+module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey, deleteCard, getListOfCards, findAllCards };
