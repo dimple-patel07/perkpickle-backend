@@ -75,7 +75,6 @@ async function importAllCards() {
 		if (!found) {
 			const isInserted = await cardDbService.createCard(card);
 			if (!isInserted) {
-				console.log("card----", card);
 				counter = counter + 1;
 				console.log("card insertion failed");
 			}
@@ -101,7 +100,6 @@ async function importAllCards() {
 	}
 	console.log("no of cards inserted :: ", cards.length - counter);
 	console.log("no of cards insertion failed :: ", counter);
-
 	// if (savedCards.length === 0 || cards.length !== savedCards.length) {
 
 	// } else {
