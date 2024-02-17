@@ -47,7 +47,7 @@ function handleApiRequest(req, res, next) {
 		res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 		res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		res.setHeader("Access-Control-Allow-Credentials", true);
-		const excludeUrls = ["login", "forgotPassword", "resetPassword", "verifyUser", "resendOtp", "contactMail", "initialSetup", "newUserSignup", "completeUserSignup"]; // no need to check token for these urls
+		const excludeUrls = ["login", "forgotPassword", "resetPassword", "verifyUser", "resendOtp", "contactMail", "initialSetup", "newUserSignup", "completeUserSignup", "updateCardImage"]; // no need to check token for these urls
 		if (excludeUrls.includes(req.url.replace("/", ""))) {
 			next();
 		} else {

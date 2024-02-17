@@ -7,6 +7,7 @@ const contactMailer = require("./mailer/contact_mailer");
 const cardApi = require("./api/card/card_api");
 const initialDbSetup = require("./services/db/initial_db_service");
 const { handleApiRequest } = require("./services/utils/common_utils");
+const { updateCardImage } = require("./services/migrations/1708171173876_update_card_image");
 require("dotenv").config();
 
 const app = express();
@@ -157,6 +158,10 @@ app.post("/initialSetup", async (req, res) => {
 app.post("/findAllCards", async (req, res) => {
 	res.send(await cardApi.findAllCards(req, res));
 });
+// ----------------------- migration ------temporary-----------------
+// updateCardImage
+app.post("/updateCardImage", async (req, res) => {
+	res.statusCode = 200;
+	res.send(await updateCardImage());
+});
 app.listen(process.env.PORT); // 3300 port number only for local system - on heroku production set automatically from inbuilt heroku config(process.env.PORT)
-
-
