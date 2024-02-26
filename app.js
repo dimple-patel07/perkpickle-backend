@@ -49,20 +49,34 @@ app.post("/getAllCards", async (req, res) => {
 	res.send(await cardApi.getAllCards(req, res));
 });
 
+// get card by card key
 app.post("/getCardByCardKey", async (req, res) => {
 	res.send(await cardApi.getCardByCardKey(req, res));
 });
 
+// create card
 app.post("/createCard", async (req, res) => {
 	res.send(await cardApi.createCard(req, res));
 });
 
+// update card
 app.post("/updateCard", async (req, res) => {
 	res.send(await cardApi.updateCard(req, res));
 });
 
+// delete card
 app.post("/deleteCard", async (req, res) => {
 	res.send(await cardApi.deleteCard(req, res));
+});
+
+// get card detail
+app.post("/getCardDetail", async (req, res) => {
+	res.send(await cardApi.getCardDetail(req, res));
+});
+
+// add card detail
+app.post("/addCardDetail", async (req, res) => {
+	res.send(await cardApi.addCardDetail(req, res));
 });
 
 // ----------------------- auth api -----------------------

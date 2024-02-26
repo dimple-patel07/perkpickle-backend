@@ -27,12 +27,13 @@ function validateToken(token) {
 	try {
 		const data = jwt.verify(token, process.env.JWT_SECRET_KEY);
 		if (data && data.issue_time && data.token_email) {
-			const diff = Date.now() - data.issue_time;
-			// const minutes = Math.floor(diff / 1000 / 60) % 60;
-			const hours = Math.ceil(diff / 1000 / 60 / 60);
-			if (hours <= 24) {
-				isVerified = true;
-			}
+			isVerified = checkTimeLimit(data.issue_time);
+			// const diff = Date.now() - data.issue_time;
+			// // const minutes = Math.floor(diff / 1000 / 60) % 60;
+			// const hours = Math.ceil(diff / 1000 / 60 / 60);
+			// if (hours <= 24) {
+			// 	isVerified = true;
+			// }
 		}
 	} catch (error) {
 		// Access Denied
@@ -47,7 +48,7 @@ function handleApiRequest(req, res, next) {
 		res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 		res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		res.setHeader("Access-Control-Allow-Credentials", true);
-		const excludeUrls = ["login", "forgotPassword", "resetPassword", "verifyUser", "resendOtp", "contactMail", "initialSetup", "newUserSignup", "completeUserSignup", "updateCardImage"]; // no need to check token for these urls
+		const excludeUrls = ["login", "forgotPassword", "resetPassword", "verifyUser", "resendOtp", "contactMail", "initialSetup", "newUserSignup", "completeUserSignup", "updateCardImage", "getCardDetail"]; // no need to check token for these urls
 		if (excludeUrls.includes(req.url.replace("/", ""))) {
 			next();
 		} else {
@@ -74,4 +75,15 @@ function unauthorizeResponse(res) {
 	res.statusCode = 401;
 	res.send({ error: "unauthorize request" });
 }
-module.exports = { generateRandomNumber, encryptStr, decryptStr, generateToken, validateToken, handleApiRequest };
+// common method to check time limit
+function checkTimeLimit(actualTime, totalHours = 24) {
+	let isValid = false;
+	const diff = Date.now() - actualTime;
+	const actualHours = Math.ceil(diff / 1000 / 60 / 60);
+	if (actualHours <= totalHours) {
+		// actual hours should be less or equal to total hours
+		isValid = true;
+	}
+	return isValid;
+}
+module.exports = { generateRandomNumber, encryptStr, decryptStr, generateToken, validateToken, handleApiRequest, checkTimeLimit };

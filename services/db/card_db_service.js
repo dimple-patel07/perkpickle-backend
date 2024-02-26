@@ -34,12 +34,13 @@ async function createCardsTable() {
 // create card
 function createCard(data) {
 	return new Promise(async (resolve) => {
-		const sql = `INSERT INTO cards (card_key, card_name, card_issuer, card_image_url, is_disabled) VALUES (
+		const sql = `INSERT INTO cards (card_key, card_name, card_issuer, card_image_url, is_disabled, card_detail) VALUES (
             '${data.card_key}',
             '${data.card_name}',
             '${data.card_issuer}',
             '${data.card_image_url}',
-            ${data.is_disabled ? data.is_disabled : false}
+            ${data.is_disabled ? data.is_disabled : false},
+            ${data.card_detail ? `'${JSON.stringify(data.card_detail)}'` : null}
         )`;
 		const client = await dbService.connectDb();
 		let isInserted = false;
@@ -68,6 +69,7 @@ function updateCard(data) {
             card_issuer = '${data.card_issuer}',
             card_image_url = '${data.card_image_url}',
             is_disabled = ${data.is_disabled ? data.is_disabled : false},
+            card_detail = ${data.card_detail ? `'${JSON.stringify(data.card_detail)}'` : null},
             modified_date = NOW()
             WHERE card_key = '${data.card_key}'`;
 		const client = await dbService.connectDb();

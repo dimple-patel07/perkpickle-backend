@@ -1,10 +1,26 @@
 const pg = require("pg");
 var client;
+
+// const pool = new pg.Pool({
+// 	connectionString: process.env.DATABASE_URL,
+// 	max: 20,
+// 	idleTimeoutMillis: 30000,
+// 	connectionTimeoutMillis: 2000,
+// 	ssl: {
+// 		rejectUnauthorized: false, // required to handle SSL error
+// 	},
+// });
+// const client = await pool.connect()
+// await client.query(sql)
+// client.release()
+
 function getClient() {
 	// expecting db with following credentials (applicable for local system)
 	// CREATE USER perkpickle WITH PASSWORD 'perkpickle123';
 	// CREATE DATABASE perkpickle_db OWNER perkpickle;
 	// psql -h localhost -d perkpickle_db -U perkpickle;
+	// ----------------
+
 	return new pg.Client({
 		connectionString: process.env.DATABASE_URL, // required on heroku
 		// either connectionString or below credentials
@@ -17,6 +33,8 @@ function getClient() {
 			rejectUnauthorized: false, // required to handle SSL error
 		},
 	});
+
+	// -------------------
 }
 // connect db
 function connectDb() {
