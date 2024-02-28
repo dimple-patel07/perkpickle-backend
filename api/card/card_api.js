@@ -63,6 +63,7 @@ async function getAllCards(req, res) {
 	let cards = [];
 	try {
 		cards = await cardDbService.getAllCards();
+		cards = cards.filter((card) => !card.is_disabled); // return only active cards
 		res.statusCode = 200;
 	} catch (error) {
 		console.error("get all cards api failed :: ", error);
@@ -136,15 +137,12 @@ async function getCardDetail(req, res) {
 	let card = null;
 	try {
 		const params = req.body;
-		res.statusCode = 500;
 		if (params && params.card_key) {
 			// required parameters - card_key
 			const data = await checkAndUpdateCard(params.card_key);
 			if (data?.card_key) {
 				card = data;
 				res.statusCode = 200;
-			} else {
-				res.statusCode = 404;
 			}
 		}
 	} catch (error) {
@@ -159,33 +157,35 @@ async function addCardDetail(req, res) {
 	let createdCard = null;
 	try {
 		const params = req.body;
-		res.statusCode = 500;
 		if (params && params.card_key) {
 			// required parameters - card_key
-			const cardDetail = await rapidApi.processRequest(`creditcard-detail-bycard/${params.card_key}`);
-			// card detail response in array format [response]
+			let savedCardData = await cardDbService.getCardByCardKey(params.card_key);
+			if (!savedCardData?.card_key) {
+				// card should not be exist
+				const cardDetail = await rapidApi.processRequest(`creditcard-detail-bycard/${params.card_key}`);
+				// card detail response in array format [response]
 
-			let cardData = {};
-			if (cardDetail?.length > 0 && cardDetail[0].cardKey) {
-				cardData = {
-					card_key: cardDetail[0].cardKey,
-					card_name: cardDetail[0].cardName.replaceAll("'", ""),
-					card_issuer: cardDetail[0].cardIssuer.replaceAll("'", ""),
-					is_disabled: false,
-				};
-				const cardImage = await rapidApi.processRequest(`creditcard-card-image/${cardDetail[0].cardKey}`);
-				cardData.card_image_url = cardImage[0].cardImageUrl;
-				cardData.card_detail = constructCardDetail(cardDetail[0]);
-				const isCreated = await cardDbService.createCard(cardData);
-				if (isCreated) {
-					console.log(`${cardDetail[0].cardKey} created successfully`);
+				let cardData = {};
+				if (cardDetail?.length > 0 && cardDetail[0].cardKey) {
+					// rapid card data found
+					cardData = {
+						card_key: cardDetail[0].cardKey,
+						card_name: cardDetail[0].cardName.replaceAll("'", ""),
+						card_issuer: cardDetail[0].cardIssuer.replaceAll("'", ""),
+						is_disabled: false,
+					};
+					const cardImage = await rapidApi.processRequest(`creditcard-card-image/${cardDetail[0].cardKey}`);
+					cardData.card_image_url = cardImage[0].cardImageUrl;
+					cardData.card_detail = constructCardDetail(cardDetail[0]);
+					const isCreated = await cardDbService.createCard(cardData);
+					if (isCreated) {
+						console.log(`${cardDetail[0].cardKey} created successfully`);
+					}
 				}
-			}
-			if (cardData?.card_detail) {
-				createdCard = cardData;
-				res.statusCode = 200;
-			} else {
-				res.statusCode = 404;
+				if (cardData?.card_detail) {
+					createdCard = cardData;
+					res.statusCode = 200;
+				}
 			}
 		}
 	} catch (error) {
@@ -198,10 +198,10 @@ async function addCardDetail(req, res) {
 // check and update card
 async function checkAndUpdateCard(cardKey) {
 	return new Promise(async (resolve) => {
-		let cardData;
 		try {
-			cardData = await cardDbService.getCardByCardKey(cardKey);
-			if (cardData?.card_key) {
+			let cardData = await cardDbService.getCardByCardKey(cardKey);
+			if (cardData && cardData.card_key && !cardData.is_disabled) {
+				// card should be active
 				if (!cardData.card_detail || !commonUtils.checkTimeLimit(cardData.card_detail.added_time)) {
 					// card detail not available (or) card detail is expired (older than 24 hours)
 					const cardDetail = await rapidApi.processRequest(`creditcard-detail-bycard/${cardKey}`);
@@ -224,6 +224,10 @@ async function checkAndUpdateCard(cardKey) {
 	});
 }
 function constructCardDetail(data) {
+	if (!data.signupBonusDesc && data.spendBonusCategory?.length > 0) {
+		data.spendBonusCategory.sort((a, b) => (a.earnMultiplier < b.earnMultiplier ? 1 : -1));
+		data.signupBonusDesc = data.spendBonusCategory[0].spendBonusDesc;
+	}
 	return {
 		added_time: Date.now(), // consider added_time never set null value
 		baseSpendEarnCategory: data.baseSpendEarnCategory.replaceAll("'", ""),
