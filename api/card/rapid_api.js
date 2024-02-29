@@ -2,7 +2,14 @@ const axios = require("axios");
 
 // get category groups
 async function spendBonusCategoryList(req, res) {
-	return await processRequest("creditcard-spendbonuscategory-categorylist");
+	const isLatest = req.body.isLatest;
+	let categoryList = [];
+	if (isLatest) {
+		categoryList = await processRequest("creditcard-spendbonuscategory-categorylist");
+	} else {
+		categoryList = require("./card_category_list.json");
+	}
+	return categoryList;
 }
 // get group's categories
 async function spendBonusCategoryCard(req, res) {

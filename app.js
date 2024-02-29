@@ -73,10 +73,9 @@ app.post("/deleteCard", async (req, res) => {
 app.post("/getCardDetail", async (req, res) => {
 	res.send(await cardApi.getCardDetail(req, res));
 });
-
-// add card detail
-app.post("/addCardDetail", async (req, res) => {
-	res.send(await cardApi.addCardDetail(req, res));
+// add list of new cards
+app.post("/addNewCards", async (req, res) => {
+	res.send(await cardApi.addNewCards(req, res));
 });
 
 // ----------------------- auth api -----------------------

@@ -151,48 +151,58 @@ async function getCardDetail(req, res) {
 		return card;
 	}
 }
-
-// add new card details - when not found from existing card list like emigrantbank-brex;
-async function addCardDetail(req, res) {
-	let createdCard = null;
+// add list of new cards
+async function addNewCards(req, res) {
+	let msg = "";
 	try {
-		const params = req.body;
-		if (params && params.card_key) {
-			// required parameters - card_key
-			let savedCardData = await cardDbService.getCardByCardKey(params.card_key);
-			if (!savedCardData?.card_key) {
-				// card should not be exist
-				const cardDetail = await rapidApi.processRequest(`creditcard-detail-bycard/${params.card_key}`);
-				// card detail response in array format [response]
-
-				let cardData = {};
-				if (cardDetail?.length > 0 && cardDetail[0].cardKey) {
-					// rapid card data found
-					cardData = {
-						card_key: cardDetail[0].cardKey,
-						card_name: cardDetail[0].cardName.replaceAll("'", ""),
-						card_issuer: cardDetail[0].cardIssuer.replaceAll("'", ""),
-						is_disabled: false,
-					};
-					const cardImage = await rapidApi.processRequest(`creditcard-card-image/${cardDetail[0].cardKey}`);
-					cardData.card_image_url = cardImage[0].cardImageUrl;
-					cardData.card_detail = constructCardDetail(cardDetail[0]);
-					const isCreated = await cardDbService.createCard(cardData);
-					if (isCreated) {
-						console.log(`${cardDetail[0].cardKey} created successfully`);
-					}
-				}
-				if (cardData?.card_detail) {
-					createdCard = cardData;
-					res.statusCode = 200;
+		res.statusCode = 200;
+		let counter = 0;
+		const newCards = req.body;
+		if (newCards?.length > 0) {
+			for (const newCard of newCards) {
+				const isCreated = await checkAndAddNewCard(newCard);
+				if (isCreated) {
+					counter = counter + 1;
 				}
 			}
+			msg = `${counter} card(s) saved successfully`;
 		}
 	} catch (error) {
-		console.error("added card detail api error :: ", error);
+		res.statusCode = 500;
+		msg = error;
 	} finally {
-		return createdCard;
+		console.log(msg);
+		return msg;
 	}
+}
+
+// add new card details - when not found from existing card list
+async function checkAndAddNewCard(newCard) {
+	return new Promise(async (resolve) => {
+		let savedCard = await cardDbService.getCardByCardKey(newCard.cardKey);
+		if (!savedCard) {
+			// new card as not showing in the existing database
+			const cardData = {
+				card_key: newCard.cardKey,
+				card_name: newCard.cardName.replaceAll("'", ""),
+				card_issuer: newCard.cardIssuer.replaceAll("'", ""),
+				is_disabled: false,
+			};
+			setTimeout(async () => {
+				const cardImage = await rapidApi.processRequest(`creditcard-card-image/${cardData.card_key}`);
+				if (cardImage?.length > 0 && cardImage[0].cardImageUrl) {
+					cardData.card_image_url = cardImage[0].cardImageUrl;
+				}
+				const isCreated = await cardDbService.createCard(cardData);
+				if (isCreated) {
+					console.log(`${newCard.cardKey} created successfully`);
+					resolve(isCreated);
+				} else {
+					resolve(null);
+				}
+			}, 400);
+		}
+	});
 }
 
 // check and update card
@@ -239,4 +249,4 @@ function constructCardDetail(data) {
 		signupBonusDesc: data.signupBonusDesc.replaceAll("'", ""),
 	};
 }
-module.exports = { getAllCards, createCard, updateCard, getCardByCardKey, deleteCard, findAllCards, getCardDetail, addCardDetail };
+module.exports = { getAllCards, createCard, updateCard, getCardByCardKey, deleteCard, findAllCards, getCardDetail, addNewCards };

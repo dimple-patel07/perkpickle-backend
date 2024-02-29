@@ -31,14 +31,14 @@ async function createCardsTable() {
 		}
 	});
 }
-// create card
+// create new card
 function createCard(data) {
 	return new Promise(async (resolve) => {
 		const sql = `INSERT INTO cards (card_key, card_name, card_issuer, card_image_url, is_disabled, card_detail) VALUES (
             '${data.card_key}',
             '${data.card_name}',
             '${data.card_issuer}',
-            '${data.card_image_url}',
+            ${data.card_image_url ? `'${data.card_image_url}'` : null},
             ${data.is_disabled ? data.is_disabled : false},
             ${data.card_detail ? `'${JSON.stringify(data.card_detail)}'` : null}
         )`;
