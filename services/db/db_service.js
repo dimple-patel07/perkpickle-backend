@@ -29,9 +29,9 @@ function getClient() {
 		// user: process.env.DB_OWNER,
 		// password: process.env.DB_PASSWORD,
 		// port: process.env.DB_PORT || 5432,
-		ssl: {
-			rejectUnauthorized: false, // required to handle SSL error
-		},
+		// ssl: {
+		// 	rejectUnauthorized: false, // required to handle SSL error
+		// },
 	});
 
 	// -------------------

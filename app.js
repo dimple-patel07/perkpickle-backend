@@ -177,4 +177,8 @@ app.post("/updateCardImage", async (req, res) => {
 	res.statusCode = 200;
 	res.send(await updateCardImage());
 });
+// Dashboar counting API
+app.get("/getDashboardCount", async (req, res) => {
+	res.send(await cardApi.getDashboardCount(req, res));
+});
 app.listen(process.env.PORT); // 3300 port number only for local system - on heroku production set automatically from inbuilt heroku config(process.env.PORT)
