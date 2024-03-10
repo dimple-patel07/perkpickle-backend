@@ -90,7 +90,7 @@ async function updateUser(req, res) {
 		if (params && params.email) {
 			// required parameters - email
 			const data = await userDbService.getUserByEmail(params.email);
-			if (data && ((data.secret_key === undefined && params.secret_key && params.is_signup_completed) || (data.secret_key && params.secret_key === undefined && params.is_signup_completed === undefined))) {
+			if (data && ((data.secret_key === undefined && params.secret_key) || (data.secret_key && params.secret_key === undefined))) {
 				if (params.is_verified === undefined) {
 					// it is only updated by verify email / explicit value
 					params.is_verified = data.is_verified;
