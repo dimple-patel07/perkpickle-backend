@@ -9,7 +9,6 @@ const initialDbSetup = require("./services/db/initial_db_service");
 const { handleApiRequest } = require("./services/utils/common_utils");
 const { updateCardImage } = require("./services/migrations/1708171173876_update_card_image");
 require("dotenv").config();
-
 const app = express();
 app.use(express.json()); //Add it first then others
 app.use(cors());
@@ -18,38 +17,35 @@ app.use((req, res, next) => {
 	handleApiRequest(req, res, next);
 });
 
-// ----------------------- card api -----------------------
-// Get Spend Bonus Category List
+// ----------------------- rapid api -----------------------
+// Get Spend Bonus Category List - return list of categories
 app.post("/spendBonusCategoryList", async (req, res) => {
 	res.send(await rapidApi.spendBonusCategoryList(req, res));
 });
 
-// Get Spend Bonus Category Card By Category Id
+// Get Spend Bonus Category Card By Category Id - return offers for specific category
 app.post("/spendBonusCategoryCard", async (req, res) => {
 	res.send(await rapidApi.spendBonusCategoryCard(req, res));
 });
 
-// Get Card Detail By Card Key
+// Get Card Detail By Card Key - return specific card detail
 app.post("/cardDetailByCardKey", async (req, res) => {
 	res.send(await rapidApi.cardDetailByCardKey(req, res));
 });
 
-// Get Credit Card Image
+// Get Card Image - return specific card image
 app.post("/getCardImage", async (req, res) => {
 	res.send(await rapidApi.getCardImage(req, res));
 });
 
-// // get list of cards
-// app.get("/getAllCards", async (req, res) => {
-// 	res.send(rapidApi.getAllCards(req, res));
-// });
+// ----------------------- card api -----------------------
 
-// get list of cards
+// get list of cards - return all the cards
 app.post("/getAllCards", async (req, res) => {
 	res.send(await cardApi.getAllCards(req, res));
 });
 
-// get card by card key
+// get card by card key - return specific card detail
 app.post("/getCardByCardKey", async (req, res) => {
 	res.send(await cardApi.getCardByCardKey(req, res));
 });
@@ -78,6 +74,10 @@ app.post("/addNewCards", async (req, res) => {
 	res.send(await cardApi.addNewCards(req, res));
 });
 
+// card list with pagination
+app.post("/findAllCards", async (req, res) => {
+	res.send(await cardApi.findAllCards(req, res));
+});
 // ----------------------- auth api -----------------------
 // login
 app.post("/login", async (req, res) => {
@@ -165,11 +165,6 @@ app.post("/contactMail", async (req, res) => {
 // setup
 app.post("/initialSetup", async (req, res) => {
 	res.send(await initialDbSetup.setup(req, res));
-});
-
-// ----------------------- Card List With pagination -----------------------
-app.post("/findAllCards", async (req, res) => {
-	res.send(await cardApi.findAllCards(req, res));
 });
 // ----------------------- migration ------temporary-----------------
 // updateCardImage

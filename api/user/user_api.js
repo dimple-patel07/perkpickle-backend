@@ -4,7 +4,7 @@ const commonUtils = require("../../services/utils/common_utils");
 const userMailer = require("../../mailer/user_mailer");
 const authMailer = require("../../mailer/auth_mailer");
 
-// create user
+// create user - consider that user only create though website
 async function createUser(req, res) {
 	let result = null;
 	try {
@@ -81,7 +81,7 @@ async function verifyUser(req, res) {
 	}
 }
 
-// update user
+// update user / update profile / complete-user-signup to set password & signup flag
 async function updateUser(req, res) {
 	let result = null;
 	try {
@@ -90,15 +90,22 @@ async function updateUser(req, res) {
 		if (params && params.email) {
 			// required parameters - email
 			const data = await userDbService.getUserByEmail(params.email);
-			if (data) {
-				params.is_verified = params.is_verified ? params.is_verified : data.is_verified; // it is only updated by verify email / explicit value
-				if (!params.secret_key) {
+			if (data && ((data.secret_key === undefined && params.secret_key && params.is_signup_completed) || (data.secret_key && params.secret_key === undefined && params.is_signup_completed === undefined))) {
+				if (params.is_verified === undefined) {
+					// it is only updated by verify email / explicit value
+					params.is_verified = data.is_verified;
+				}
+				if (params.secret_key === undefined) {
 					// applicable on profile updated
 					params.secret_key = data.secret_key;
 				}
 				if (params.is_signup_completed === undefined) {
 					// is_signup_completed only update once while signup form submitted
 					params.is_signup_completed = data.is_signup_completed;
+				}
+				if (params.card_keys === undefined) {
+					// reset user associated cards
+					params.card_keys = data.card_keys;
 				}
 				const isUpdated = await userDbService.updateUser(params);
 				if (isUpdated) {

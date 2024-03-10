@@ -1,0 +1,894 @@
+{
+	"info": {
+		"_postman_id": "648b5ec7-022d-438f-a410-35ce7cae004a",
+		"name": "PerkPickle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsInBhc3N3b3JkIjoieHl6QDEyMyJ9\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgotPassword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"help@xyz.com\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/forgotPassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"forgotPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePassword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5OTgzOTU2MzQwLCJ0b2tlbl9lbWFpbCI6ImhlbHBAeHl6LmNvbSIsImlhdCI6MTcwOTk4Mzk1Nn0.Bufp5SOz_DLhYyPYTZWsvtuh3VVQD2N9mxcfxTSKdI8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsInBhc3N3b3JkIjoieHl6QDEyMyIsIm5ld1Bhc3N3b3JkIjoieHl6QDEyMzQifQ==\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/changePassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetPassword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsIm5ld1Bhc3N3b3JkIjoieHl6QDEyMzQifQ==\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/resetPassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"resetPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resendOtp",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"help@xyz.com\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/resendOtp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"resendOtp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verifyUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"help@abc.com\", \"otp\": 344320}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/verifyUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"verifyUser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "getAllUsers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3300/getAllUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"getAllUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserByEmail",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5OTgzMjQzNzgyLCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5OTgzMjQzfQ.Ou9Ye2SyIFtSDBf_tPcGU7bMzmJ6rSTnf206cyCI04o",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"help@xyz.com\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/getUserByEmail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"getUserByEmail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user associated cards",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"help@xyz.com\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/getUserWithAssociatedCards",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"getUserWithAssociatedCards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"help@xyz.com\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/createUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"createUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5OTg4NTQyMDI0LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5OTg4NTQyfQ.npl1HWOgXuSUAnOswVfPZ6FuweRjRHBBLU3DVfUKf28",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"help@xyz.com\", \"first_name\": \"abc\", \"last_name\": \"xyz\", \"zip_code\": 73201, \"address\": \"NY US\", \"phone_number\": \"1(123)555-3890\", \"card_keys\": \"boa-alaska,boa-biz-alaska\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/updateUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"updateUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"a@g.com\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/deleteUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"deleteUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "completeUserSignup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"help@xyz.com\",\"first_name\":\"help\",\"last_name\":\"xyz\",\"secret_key\":\"eHl6QDEyMw==\",\"zip_code\":\"12345\",\"address\":\"austin\",\"phone_number\":\"1234567890\",\"is_signup_completed\":true}\n"
+						},
+						"url": {
+							"raw": "http://localhost:3300/completeUserSignup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"completeUserSignup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "newUserSignup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"help@xyz.com\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/newUserSignup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"newUserSignup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUserCards",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5OTg4NTQyMDI0LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5OTg4NTQyfQ.npl1HWOgXuSUAnOswVfPZ6FuweRjRHBBLU3DVfUKf28",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"help@xyz.com\", \"cardKeys\": \"comenity-gasbuddy,goldmansachs-applecard,firstsource-platinum\"}\n"
+						},
+						"url": {
+							"raw": "http://localhost:3300/updateUserCards",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"updateUserCards"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "card",
+			"item": [
+				{
+					"name": "getAllCards",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3300/getAllCards",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"getAllCards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCardByCardKey",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"card_key\":\"pqr_xyz\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/getCardByCardKey",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"getCardByCardKey"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"card_key\":\"pqr_xyz\", \"card_name\": \"cname-pqr-xyz\", \"card_issuer\": \"c-issuer-updated-pqr\",\"card_image_url\":\"https://img-url\", \"card_detail\": {\"added_time\":1709266239872,\"baseSpendEarnCategory\":\"\",\"baseSpendEarnType\":\"\",\"baseSpendEarnCurrency\":\"\",\"baseSpendEarnIsCash\":0,\"baseSpendAmount\":0,\"cardUrl\":\"https://www.citi.com/credit-cards/citi-diamond-preferred-credit-card\",\"signupBonusDesc\":\"Citi Entertainment takes the once out of once in a lifetime. Get special access to purchase tickets to thousands of events, including presale tickets and exclusive experiences for the years most anticipated concerts, sporting events, dining experiences and more.\"} }"
+						},
+						"url": {
+							"raw": "http://localhost:3300/createCard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"createCard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"card_key\":\"pqr_xyz\", \"card_name\": \"pqr-xyz-update+\", \"card_issuer\": \"c-issuer-updated\",\"card_image_url\":\"https://img-url\", \"card_detail\": null}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/updateCard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"updateCard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"card_key\":\"pqr_xyz\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/deleteCard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"deleteCard"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "rapid",
+			"item": [
+				{
+					"name": "spendBonusCategoryList",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the authorization header generated by Postman.",
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"isLatest\": true}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/spendBonusCategoryList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"spendBonusCategoryList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "spendBonusCategoryCard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"spendBonusCategoryId\": 176638649}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/spendBonusCategoryCard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"spendBonusCategoryCard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cardDetailByCardKey",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"cardKey\": \"citi-thankyoupreferred\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/cardDetailByCardKey",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"cardDetailByCardKey"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCardImage",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZV90aW1lIjoxNzA5NDYwNDI5NjY5LCJ0b2tlbl9lbWFpbCI6ImVpdHZhbmRAZ21haWwuY29tIiwiaWF0IjoxNzA5NDYwNDI5fQ.2k4kfohWDoRdn4R9LhKsa7HeDYVASiUumWMy-gCSZLA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"cardKey\": \"comenity-aaadaily\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/getCardImage",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"getCardImage"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "contact",
+			"item": [
+				{
+					"name": "contactMail",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"sdf\", \"email\": \"sf@g.com\", \"subject\": \"sf\", \"message\": \"df\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3300/contactMail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"contactMail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "initial",
+			"item": [
+				{
+					"name": "initialSetup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3300/initialSetup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3300",
+							"path": [
+								"initialSetup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

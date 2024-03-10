@@ -26,11 +26,6 @@ async function getCardImage(req, res) {
 	const cardKey = req.body.cardKey;
 	return await processRequest(`creditcard-card-image/${cardKey}`);
 }
-// get all cards from static json list
-function getAllCards(req, res) {
-	const cards = require("./card_list.json");
-	return cards;
-}
 // process request
 function processRequest(url) {
 	return new Promise((resolve) => {
@@ -56,4 +51,4 @@ function processRequest(url) {
 			});
 	});
 }
-module.exports = { spendBonusCategoryList, spendBonusCategoryCard, cardDetailByCardKey, getCardImage, getAllCards, processRequest };
+module.exports = { spendBonusCategoryList, spendBonusCategoryCard, cardDetailByCardKey, getCardImage, processRequest };

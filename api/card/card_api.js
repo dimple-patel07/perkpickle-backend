@@ -41,6 +41,10 @@ async function updateCard(req, res) {
 			// required parameters - card_key
 			const data = await cardDbService.getCardByCardKey(params.card_key);
 			if (data) {
+				if (params.card_detail === undefined) {
+					// consider that all filed will be pass for update operation except card_detail, modified_date, created_date
+					params.card_detail = data.card_detail;
+				}
 				const isUpdated = await cardDbService.updateCard(params);
 				if (isUpdated) {
 					res.statusCode = 200;
@@ -233,10 +237,15 @@ async function checkAndUpdateCard(cardKey) {
 		}
 	});
 }
+// construct card detail :: !signupBonusDesc => !spendBonusDesc => benefitDesc
 function constructCardDetail(data) {
-	if (!data.signupBonusDesc && data.spendBonusCategory?.length > 0) {
-		data.spendBonusCategory.sort((a, b) => (a.earnMultiplier < b.earnMultiplier ? 1 : -1));
-		data.signupBonusDesc = data.spendBonusCategory[0].spendBonusDesc;
+	if (!data.signupBonusDesc) {
+		if (data.spendBonusCategory?.length > 0) {
+			data.spendBonusCategory.sort((a, b) => (a.earnMultiplier < b.earnMultiplier ? 1 : -1));
+			data.signupBonusDesc = data.spendBonusCategory[0].spendBonusDesc;
+		} else if (data.benefit?.length > 0) {
+			data.signupBonusDesc = data.benefit[0].benefitDesc;
+		}
 	}
 	return {
 		added_time: Date.now(), // consider added_time never set null value
@@ -249,4 +258,4 @@ function constructCardDetail(data) {
 		signupBonusDesc: data.signupBonusDesc.replaceAll("'", ""),
 	};
 }
-module.exports = { getAllCards, createCard, updateCard, getCardByCardKey, deleteCard, findAllCards, getCardDetail, addNewCards };
+module.exports = { getAllCards, getCardByCardKey, createCard, updateCard, deleteCard, findAllCards, getCardDetail, addNewCards };

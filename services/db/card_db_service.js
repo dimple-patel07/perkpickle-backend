@@ -10,6 +10,7 @@ async function createCardsTable() {
             card_issuer VARCHAR(255) not null,
             card_image_url VARCHAR(255) not null,
             is_disabled BOOLEAN DEFAULT false,
+            card_detail JSON,
             created_date timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
             modified_date timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
         )`;
