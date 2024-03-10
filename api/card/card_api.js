@@ -258,4 +258,16 @@ function constructCardDetail(data) {
 		signupBonusDesc: data.signupBonusDesc.replaceAll("'", ""),
 	};
 }
-module.exports = { getAllCards, getCardByCardKey, createCard, updateCard, deleteCard, findAllCards, getCardDetail, addNewCards };
+// get dashboard count
+async function getDashboardCount(req, res) {
+	let cards = [];
+	try {
+		cards = await cardDbService.dashboardCount();
+		res.statusCode = 200;
+	} catch (error) {
+		console.error("get all cards count api failed :: ", error);
+	} finally {
+		return cards;
+	}
+}
+module.exports = { getAllCards, getCardByCardKey, createCard, updateCard, deleteCard, findAllCards, getCardDetail, addNewCards, getDashboardCount };

@@ -235,4 +235,44 @@ function findAllCards(req) {
 		}
 	});
 }
-module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey, deleteCard, getListOfCards, findAllCards };
+
+function dashboardCount(req){
+	return new Promise(async (resolve) => {
+
+	const sql = `SELECT count(*) as total from cards where is_disabled = false `;
+	const client = await dbService.connectDb();
+	
+	let count = 0;
+	let userCount = 0;
+	let dataRes = {
+		user:0,
+		card:0
+	}
+	if (client) {
+		client.query(sql, async (error, result) => {
+			count = result.rows[0].total;
+			if (error) {
+				console.error("card selection error :: ", error);
+			} else {
+			const sql2 = `SELECT count(*) as totaluser from users where is_signup_completed = true `;
+				client.query(sql2, async (error, resultData) => {
+				if (error) {
+					console.error("user selection error :: ", error);
+				}
+				userCount = resultData.rows[0].totaluser;
+					dataRes = {
+						user:userCount,
+						card:count
+					};
+					await dbService.disConnectDb();
+					resolve(dataRes);
+			})
+			}
+			
+		});
+	} else {
+		resolve(dataRes);
+	}
+	});
+}
+module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey, deleteCard, getListOfCards, findAllCards,dashboardCount };
