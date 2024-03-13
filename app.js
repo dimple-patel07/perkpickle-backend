@@ -75,7 +75,7 @@ app.post("/addNewCards", async (req, res) => {
 });
 
 // card list with pagination
-app.post("/findAllCards", async (req, res) => {
+app.post("/cards/all", async (req, res) => {
 	res.send(await cardApi.findAllCards(req, res));
 });
 // ----------------------- auth api -----------------------
@@ -173,7 +173,7 @@ app.post("/updateCardImage", async (req, res) => {
 	res.send(await updateCardImage());
 });
 // Dashboar counting API
-app.get("/getDashboardCount", async (req, res) => {
+app.get("/dashboard/count", async (req, res) => {
 	res.send(await cardApi.getDashboardCount(req, res));
 });
 app.listen(process.env.PORT); // 3300 port number only for local system - on heroku production set automatically from inbuilt heroku config(process.env.PORT)
