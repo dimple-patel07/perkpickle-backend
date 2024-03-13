@@ -325,4 +325,37 @@ async function getUserWithAssociatedCards(req, res) {
 		return result;
 	}
 }
-module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards };
+
+// create user - For Admin by pass OTP logic
+async function createUserAdmin(req, res) {
+	console.log ("create user")
+	let result = null;
+	try {
+		res.statusCode = 500;
+		const params = req.body;
+		console.log(params);
+		if (params && params.email) {
+			// required parameter - email
+			const data = await userDbService.getUserByEmail(params.email);
+			if (data && data.email && data.is_signup_completed) {
+				// email already exist
+				result = { error: "email already exist" };
+			} else {
+				params.otp = commonUtils.generateRandomNumber();
+				const isCreated = await userDbService.createUserAdmin(params);
+				if (isCreated) {
+					// success
+					res.statusCode = 201;
+					result = { email: params.email, message: "User Created successfully" };				
+				}
+			}
+		} else {
+			res.statusCode = 400;
+		}
+	} catch (error) {
+		console.error("create user api failed :: ", error);
+	} finally {
+		return result;
+	}
+}
+module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards, createUserAdmin };

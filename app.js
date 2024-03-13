@@ -176,4 +176,12 @@ app.post("/updateCardImage", async (req, res) => {
 app.get("/dashboard/count", async (req, res) => {
 	res.send(await cardApi.getDashboardCount(req, res));
 });
+
+//------------------ Admin User's API -------------------------------
+// Admin Create user
+app.post("/users/create", async (req, res) => {
+	res.send(await userApi.createUserAdmin(req, res));
+});
 app.listen(process.env.PORT); // 3300 port number only for local system - on heroku production set automatically from inbuilt heroku config(process.env.PORT)
+
+

@@ -206,4 +206,31 @@ function deleteUser(email) {
 		}
 	});
 }
-module.exports = { createUser, updateUser, getUserByEmailAndOtp, getUserByEmail, createUserTable, getUserByEmailAndPassword, getAllUsers, deleteUser };
+// create new user for admin
+function createUserAdmin(data) {
+	data.secret_key = commonUtils.encryptStr(data.password);
+	return new Promise(async (resolve) => {		
+		const sql = `INSERT INTO users (email, first_name, last_name,zip_code,address, phone_number, secret_key,is_verified, is_signup_completed) VALUES (
+            '${data.email}',
+            '${data.first_name}','${data.last_name}','${data.zip_code}','${data.address}','${data.phone_number}','${data.secret_key}',
+			${data.is_verified},${data.is_signup_completed}
+        )`;
+		const client = await dbService.connectDb();
+		let isInserted = false;
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("user creation error :: ", error);
+				} else {
+					isInserted = true;
+					console.log("user created successfully");
+				}
+				await dbService.disConnectDb();
+				resolve(isInserted);
+			});
+		} else {
+			resolve(isInserted);
+		}
+	});
+}
+module.exports = { createUser, updateUser, getUserByEmailAndOtp, getUserByEmail, createUserTable, getUserByEmailAndPassword, getAllUsers, deleteUser, createUserAdmin };
