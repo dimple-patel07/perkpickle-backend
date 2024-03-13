@@ -358,4 +358,49 @@ async function createUserAdmin(req, res) {
 		return result;
 	}
 }
-module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards, createUserAdmin };
+
+async function updateUserAdmin(req, res) {
+	let result = null;
+	try {
+		const params = req.body;
+		res.statusCode = 500;
+		if (params && params.email) {
+			// required parameters - email
+			const data = await userDbService.getUserByEmail(params.email);
+			if (data && ((data.secret_key === null && params.secret_key) || (data.secret_key && params.secret_key === undefined))) {
+				if (params.is_verified === undefined) {
+					// it is only updated by verify email / explicit value
+					params.is_verified = data.is_verified;
+				}
+				if (params.password === undefined) {
+					// applicable on profile updated
+					params.secret_key = data.secret_key;
+				}else{
+					params.secret_key =  commonUtils.encryptStr(params.password);
+				}
+				if (params.is_signup_completed === undefined) {
+					// is_signup_completed only update once while signup form submitted
+					params.is_signup_completed = data.is_signup_completed;
+				}
+				if (params.card_keys === undefined) {
+					// reset user associated cards
+					params.card_keys = data.card_keys;
+				}
+				const isUpdated = await userDbService.updateUser(params);
+				if (isUpdated) {
+					res.statusCode = 200;
+					result = { email: params.email, message: "user updated successfully" };
+				}
+			} else {
+				res.statusCode = 404;
+			}
+		} else {
+			res.statusCode = 400;
+		}
+	} catch (error) {
+		console.error("update user api failed :: ", error);
+	} finally {
+		return result;
+	}
+}
+module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards, createUserAdmin, updateUserAdmin };

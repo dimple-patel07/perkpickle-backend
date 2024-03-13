@@ -889,6 +889,127 @@
 					"response": []
 				}
 			]
+		},
+
+		{
+			"name": "users/create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsIm5ld1Bhc3N3b3JkIjoieHl6QDEyMzQifQ==\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/users/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"users/create"
+					]
+				}
+			},
+			"response": []
+		},
+
+		{
+			"name": "users/update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsIm5ld1Bhc3N3b3JkIjoieHl6QDEyMzQifQ==\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/users/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"users/update"
+					]
+				}
+			},
+			"response": []
+		},
+
+		{
+			"name": "dashboar/count",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				
+				"url": {
+					"raw": "http://localhost:3300/dashboard/count",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"dashboard/count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cards/all",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"key\": \"eyJlbWFpbCI6ImhlbHBAeHl6LmNvbSIsIm5ld1Bhc3N3b3JkIjoieHl6QDEyMzQifQ==\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/cards/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"cards/all"
+					]
+				}
+			},
+			"response": []
 		}
+
 	]
 }
