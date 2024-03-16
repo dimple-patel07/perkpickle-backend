@@ -7,7 +7,7 @@ async function spendBonusCategoryList(req, res) {
 	if (isLatest) {
 		categoryList = await processRequest("creditcard-spendbonuscategory-categorylist");
 	} else {
-		categoryList = require("./card_category_list.json");
+		categoryList = require("../../services/json/card_category_list.json");
 	}
 	return categoryList;
 }

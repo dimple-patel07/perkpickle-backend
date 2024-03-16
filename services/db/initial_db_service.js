@@ -67,7 +67,7 @@ async function setup(req, res) {
 // import cards
 async function importAllCards() {
 	// const savedCards = await cardDbService.getAllCards();
-	const cards = require("./card-list-with-img.json");
+	const cards = require("../json/card-list-with-img.json");
 
 	let counter = 0;
 	for (const card of cards) {
