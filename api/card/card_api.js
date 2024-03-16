@@ -172,7 +172,7 @@ async function addNewCards(req, res) {
 			msg = `${counter} card(s) saved successfully`;
 		}
 	} catch (error) {
-		res.statusCode = 500;
+		// res.statusCode = 500;
 		msg = error;
 	} finally {
 		console.log(msg);
