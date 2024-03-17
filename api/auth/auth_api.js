@@ -103,6 +103,7 @@ async function resetPassword(req, res) {
 						if (isUpdated) {
 							result = { email: data.email, message: "password reset successfully" };
 							res.statusCode = 200;
+							authMailer.sendChangePasswordEmail(data);
 						}
 					}
 				}
@@ -136,6 +137,7 @@ async function changePassword(req, res) {
 						if (isUpdated) {
 							result = { email: data.email, message: "password changed successfully" };
 							res.statusCode = 200;
+							authMailer.sendChangePasswordEmail(data);
 						}
 					} else {
 						result = { error: "invalid current password" };

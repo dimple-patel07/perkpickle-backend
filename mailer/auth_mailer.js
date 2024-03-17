@@ -1,4 +1,5 @@
 const { mailerConfig } = require("./mailer_config");
+const orgName = "PerkPickle";
 
 // forgot password email
 function sendForgotPasswordEmail(userData) {
@@ -7,9 +8,16 @@ function sendForgotPasswordEmail(userData) {
 
 	mailerConfig(userData.email, subject, htmlTemplate);
 }
+
+// change password email
+function sendChangePasswordEmail(userData) {
+	const subject = "Password has been changed for Your PerkPickle Account";
+	const htmlTemplate = changePasswordEmailTemplate(userData);
+
+	mailerConfig(userData.email, subject, htmlTemplate);
+}
 // forgot password email template
 function forgotPasswordEmailTemplate(userData) {
-	const orgName = "PerkPickle";
 	const currentTime = Date.now();
 	return `
     <html>
@@ -32,4 +40,24 @@ function forgotPasswordEmailTemplate(userData) {
   `;
 }
 
-module.exports = { sendForgotPasswordEmail };
+// change password email template
+function changePasswordEmailTemplate(userData) {
+	const currentTime = Date.now();
+	return `
+    <html>
+      <body>
+      <!-- opacity: 0 - to ensures Gmail doesn't trim the email -->
+      <span style="opacity: 0"> ${currentTime} </span>
+        <p>Dear ${userData.first_name} ${userData.last_name},</p>
+        <p>We hope this email finds you well. It appears that a request has been made to change the password for your ${orgName} account. If you initiated this request, please ignore this email. If you did not make this request, we recommend contacting our support team immediately at <a href="${process.env.PERKPICKLE_WEB_URL}/contact-us" target="blank">support@perkpickle.com</a>.</p>
+        <p>Thank you for your prompt attention to this matter. We are committed to ensuring the security of your ${orgName} account and appreciate your cooperation.</p>
+        <p>Best regards,</p>
+        <p>${orgName} Customer Support Team</p>
+        <!-- opacity: 0 - to ensure Gmail doesn't trim the email -->
+       <span style="opacity: 0"> ${currentTime} </span>
+      </body>
+    </html>
+  `;
+}
+
+module.exports = { sendForgotPasswordEmail, sendChangePasswordEmail };
