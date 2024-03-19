@@ -328,7 +328,7 @@ async function getUserWithAssociatedCards(req, res) {
 
 // create user - For Admin by pass OTP logic
 async function createUserAdmin(req, res) {
-	console.log ("create user")
+	console.log("create user");
 	let result = null;
 	try {
 		res.statusCode = 500;
@@ -346,7 +346,7 @@ async function createUserAdmin(req, res) {
 				if (isCreated) {
 					// success
 					res.statusCode = 201;
-					result = { email: params.email, message: "User Created successfully" };				
+					result = { email: params.email, message: "User Created successfully" };
 				}
 			}
 		} else {
@@ -375,8 +375,8 @@ async function updateUserAdmin(req, res) {
 				if (params.password === undefined) {
 					// applicable on profile updated
 					params.secret_key = data.secret_key;
-				}else{
-					params.secret_key =  commonUtils.encryptStr(params.password);
+				} else {
+					params.secret_key = commonUtils.encryptStr(params.password);
 				}
 				if (params.is_signup_completed === undefined) {
 					// is_signup_completed only update once while signup form submitted
@@ -403,4 +403,16 @@ async function updateUserAdmin(req, res) {
 		return result;
 	}
 }
-module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards, createUserAdmin, updateUserAdmin };
+
+async function findAllUsers(req, res) {
+	let cards = [];
+	try {
+		cards = await userDbService.findAllUsers(req);
+		res.statusCode = 200;
+	} catch (error) {
+		console.error("get all users api failed :: ", error);
+	} finally {
+		return cards;
+	}
+}
+module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards, createUserAdmin, updateUserAdmin, findAllUsers };
