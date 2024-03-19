@@ -242,7 +242,8 @@ function findAllUsers(req) {
 		let search = req.body.search;
 		const offset = page ? (page - 1) * limit : 0;
 
-		const sql = `SELECT count(*) as total from users where is_signup_completed = true and first_name like '%${search}%' OR last_name like '%${search}%' OR email like '%${search}%'`;
+		const sql = `SELECT count(*) as total from users where is_signup_completed = true and (first_name like '%${search}%' OR last_name like '%${search}%' OR email like '%${search}%')`;
+		console.log(sql);
 		const client = await dbService.connectDb();
 
 		let cardList = [];
@@ -263,7 +264,9 @@ function findAllUsers(req) {
 				if (error) {
 					console.error("users selection error :: ", error);
 				} else {
-					const sql2 = `SELECT * from users where is_signup_completed = true and first_name like '%${search}%' OR last_name like '%${search}%' OR email like '%${search}%' ORDER BY ${sortby} ${sortorder} limit ${limit} offset ${offset}`;
+					const sql2 = `SELECT * from users where is_signup_completed = true and (first_name like '%${search}%' OR last_name like '%${search}%' OR email like '%${search}%') ORDER BY ${sortby} ${sortorder} limit ${limit} offset ${offset}`;
+					console.log(sql2);
+
 					client.query(sql2, async (error, resultData) => {
 						if (error) {
 							console.error("users selection error :: ", error);
