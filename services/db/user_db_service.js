@@ -235,4 +235,64 @@ function createUserAdmin(data) {
 		}
 	});
 }
-module.exports = { createUser, updateUser, getUserByEmailAndOtp, getUserByEmail, createUserTable, getUserByEmailAndPassword, getAllUsers, deleteUser, createUserAdmin };
+function findAllUsers(req) {
+	return new Promise(async (resolve) => {
+		let page = parseInt(req.body.pageNumber);
+		let limit = parseInt(req.body.pageSize);
+		let sortby = req.body.sortBy;
+		let sortorder = req.body.sortOrder;
+		let search = req.body.search;
+		const offset = page ? (page - 1) * limit : 0;
+
+		const sql = `SELECT count(*) as total from users where is_signup_completed = true and (first_name like '%${search}%' OR last_name like '%${search}%' OR email like '%${search}%')`;
+		console.log(sql);
+		const client = await dbService.connectDb();
+
+		let cardList = [];
+		let count = 0;
+		let dataRes = {
+			totalCount: 0,
+			pageNumber: page,
+			pageSize: limit,
+			sortBy: sortby,
+			sortOrder: sortorder,
+			search: search,
+			data: [],
+		};
+		if (client) {
+			client.query(sql, async (error, result) => {
+				count = result.rows[0].total;
+				console.log(count);
+				if (error) {
+					console.error("users selection error :: ", error);
+				} else {
+					const sql2 = `SELECT * from users where is_signup_completed = true and (first_name like '%${search}%' OR last_name like '%${search}%' OR email like '%${search}%') ORDER BY ${sortby} ${sortorder} limit ${limit} offset ${offset}`;
+					console.log(sql2);
+
+					client.query(sql2, async (error, resultData) => {
+						if (error) {
+							console.error("users selection error :: ", error);
+						}
+						if (resultData?.rows?.length > 0) {
+							cardList = resultData.rows;
+							dataRes = {
+								totalCount: parseInt(count),
+								pageNumber: page,
+								pageSize: limit,
+								sortBy: sortby,
+								sortOrder: sortorder,
+								search: search,
+								data: resultData.rows,
+							};
+						}
+						await dbService.disConnectDb();
+						resolve(dataRes);
+					});
+				}
+			});
+		} else {
+			resolve(dataRes);
+		}
+	});
+}
+module.exports = { createUser, updateUser, getUserByEmailAndOtp, getUserByEmail, createUserTable, getUserByEmailAndPassword, getAllUsers, deleteUser, createUserAdmin, findAllUsers };

@@ -411,4 +411,16 @@ async function updateUserAdmin(req, res) {
 		return result;
 	}
 }
-module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards, createUserAdmin, updateUserAdmin };
+
+async function findAllUsers(req, res) {
+	let cards = [];
+	try {
+		cards = await userDbService.findAllUsers(req);
+		res.statusCode = 200;
+	} catch (error) {
+		console.error("get all users api failed :: ", error);
+	} finally {
+		return cards;
+	}
+}
+module.exports = { createUser, verifyUser, updateUser, getUserByEmailAndPassword, getUserByEmail, resendOtp, updateUserCards, getAllUsers, deleteUser, getUserWithAssociatedCards, createUserAdmin, updateUserAdmin, findAllUsers };

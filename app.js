@@ -186,6 +186,8 @@ app.post("/users/create", async (req, res) => {
 app.post("/users/update", async (req, res) => {
 	res.send(await userApi.updateUserAdmin(req, res));
 });
+app.post("/users/all", async (req, res) => {
+	res.send(await userApi.findAllUsers(req, res));
+});
+
 app.listen(process.env.PORT); // 3300 port number only for local system - on heroku production set automatically from inbuilt heroku config(process.env.PORT)
-
-
