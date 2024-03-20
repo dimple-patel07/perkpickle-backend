@@ -15,6 +15,7 @@ async function createUserTable() {
             secret_key VARCHAR(255),
             is_verified BOOLEAN DEFAULT false,
             is_signup_completed BOOLEAN DEFAULT false,
+            is_admin BOOLEAN DEFAULT false,
             otp INT,
             card_keys TEXT,
             created_date timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -79,6 +80,7 @@ function updateUser(data) {
             otp = ${data.otp ? data.otp : null},
             is_verified = ${data.is_verified ? data.is_verified : false},
             is_signup_completed = ${data.is_signup_completed ? data.is_signup_completed : false},
+            is_admin = ${data.is_admin ? data.is_admin : false},
             modified_date = NOW()
             WHERE email = '${data.email}'
         `;
@@ -209,11 +211,11 @@ function deleteUser(email) {
 // create new user for admin
 function createUserAdmin(data) {
 	data.secret_key = commonUtils.encryptStr(data.password);
-	return new Promise(async (resolve) => {		
-		const sql = `INSERT INTO users (email, first_name, last_name,zip_code,address, phone_number, secret_key,is_verified, is_signup_completed) VALUES (
+	return new Promise(async (resolve) => {
+		const sql = `INSERT INTO users (email, first_name, last_name,zip_code,address, phone_number, secret_key,is_verified, is_signup_completed, is_admin) VALUES (
             '${data.email}',
             '${data.first_name}','${data.last_name}','${data.zip_code}','${data.address}','${data.phone_number}','${data.secret_key}',
-			${data.is_verified},${data.is_signup_completed}
+			${data.is_verified},${data.is_signup_completed},${data.is_admin ? data.is_admin : false}
         )`;
 		const client = await dbService.connectDb();
 		let isInserted = false;

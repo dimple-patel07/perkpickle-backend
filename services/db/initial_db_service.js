@@ -18,6 +18,29 @@ async function setup(req, res) {
 				isCreated = await userDbService.createUserTable();
 				if (isCreated) {
 					// users table created
+					// create admin user
+					// INSERT INTO users (email, first_name, last_name,zip_code,address, phone_number, secret_key,is_verified, is_signup_completed, is_admin) VALUES (
+					//     'admin@perkpickle.com',
+					//     'admin','perkpickle','12345','NY','1234567890','UGVya3BpY2tsZUAxMjM=',
+					//     true,true,true
+					// )
+					const params = {
+						email: "admin@perkpickle.com",
+						first_name: "admin",
+						last_name: "perkpickle",
+						zip_code: "12345",
+						address: "NY",
+						phone_number: "1234567890",
+						password: "Perkpickle@123",
+						is_verified: true,
+						is_signup_completed: true,
+						is_admin: true,
+					};
+					const isAdminCreated = await userDbService.createUserAdmin(params);
+					if (isAdminCreated) {
+						console.log("admin created successfully");
+					}
+					// create client user
 					const data = {
 						email: "help@perkpickle.com",
 						otp: commonUtils.generateRandomNumber(),
