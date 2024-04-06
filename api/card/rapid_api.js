@@ -2,7 +2,7 @@ const axios = require("axios");
 
 // get category groups
 async function spendBonusCategoryList(req, res) {
-	const isLatest = req.body.isLatest;
+	const isLatest = req.body.isLatest || process.env.IS_LOAD_LATEST_CATEGORIES === "true" ? true : false;
 	let categoryList = [];
 	if (isLatest) {
 		categoryList = await processRequest("creditcard-spendbonuscategory-categorylist");
