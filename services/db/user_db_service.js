@@ -295,4 +295,26 @@ function findAllUsers(req) {
 		}
 	});
 }
-module.exports = { createUser, updateUser, getUserByEmailAndOtp, getUserByEmail, createUserTable, getUserByEmailAndPassword, getAllUsers, deleteUser, createUserAdmin, findAllUsers };
+function verifyAdminUser(email, password) {
+	return new Promise(async (resolve) => {
+		const secretKey = commonUtils.encryptStr(password);
+		const sql = `SELECT * from users where is_admin = true and email='${email}' and secret_key='${secretKey}'`;
+		console.log(sql);
+		const client = await dbService.connectDb();
+		let found = null;
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("user selection error :: ", error);
+				} else if (result?.rows?.length > 0) {
+					found = result.rows[0];
+				}
+				await dbService.disConnectDb();
+				resolve(found);
+			});
+		} else {
+			resolve(found);
+		}
+	});
+}
+module.exports = { createUser, updateUser, getUserByEmailAndOtp, getUserByEmail, createUserTable, getUserByEmailAndPassword, getAllUsers, deleteUser, createUserAdmin, findAllUsers, verifyAdminUser };

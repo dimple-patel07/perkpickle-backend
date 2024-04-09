@@ -154,4 +154,51 @@ async function changePassword(req, res) {
 	}
 }
 
-module.exports = { login, forgotPassword, resetPassword, changePassword };
+// Admin login
+async function adminlogin(req, res) {
+	let result = null;
+	try {
+		result = { error: "invalid login details" };
+		res.statusCode = 400;
+		if (req.body.key) {
+			let params = commonUtils.decryptStr(req.body.key);
+			if (params) {
+				params = JSON.parse(params);
+				if (params.email && params.password) {
+					const data = await userDbService.verifyAdminUser(params.email, params.password);
+					if (data && data.email) {
+						if (data.is_verified) {
+							// must be verified user
+							if (data.is_signup_completed) {
+								// must be signup process completed
+								let userName;
+								if (data.first_name && data.last_name) {
+									userName = `${data.first_name} ${data.last_name}`;
+								} else {
+									userName = data.email;
+								}
+								result = { token: commonUtils.generateToken(data.email), email: data.email, userName };
+								res.statusCode = 200;
+							} else {
+								// signup process pending
+								result = { error: "user is not registered" };
+							}
+						} else {
+							// email verification pending
+							result = { error: "email verification pending" };
+						}
+					} else {
+						res.statusCode = 500;
+						result = { error: "email or password doesn't match" };
+					}
+				}
+			}
+		}
+	} catch (error) {
+		console.error("login api failed :: ", error);
+	} finally {
+		return result;
+	}
+}
+
+module.exports = { login, forgotPassword, resetPassword, changePassword, adminlogin };

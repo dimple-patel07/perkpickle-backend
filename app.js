@@ -190,4 +190,9 @@ app.post("/users/all", async (req, res) => {
 	res.send(await userApi.findAllUsers(req, res));
 });
 
+// login
+app.post("/adminlogin", async (req, res) => {
+	res.send(await authApi.adminlogin(req, res));
+});
+
 app.listen(process.env.PORT); // 3300 port number only for local system - on heroku production set automatically from inbuilt heroku config(process.env.PORT)
