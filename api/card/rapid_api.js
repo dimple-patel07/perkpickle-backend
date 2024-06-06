@@ -2,13 +2,15 @@ const axios = require("axios");
 
 // get category groups
 async function spendBonusCategoryList(req, res) {
-	const isLatest = req.body.isLatest || process.env.IS_LOAD_LATEST_CATEGORIES === "true" ? true : false;
-	let categoryList = [];
-	if (isLatest) {
-		categoryList = await processRequest("creditcard-spendbonuscategory-categorylist");
-	} else {
-		categoryList = require("../../services/json/card_category_list.json");
-	}
+	// const isLatest = req.body.isLatest || process.env.IS_LOAD_LATEST_CATEGORIES === "true" ? true : false;
+	// const isLatest = true; // for now always true - due to rapid team's concerns
+	// let categoryList = [];
+	// if (isLatest) {
+	// 	categoryList = await processRequest("creditcard-spendbonuscategory-categorylist");
+	// } else {
+	// 	categoryList = require("../../services/json/card_category_list.json");
+	// }
+	const categoryList = await processRequest("creditcard-spendbonuscategory-categorylist");
 	return categoryList;
 }
 // get group's categories
