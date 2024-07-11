@@ -32,11 +32,7 @@ function processRequest(url) {
 		let result = undefined;
 		const options = {
 			method: "GET",
-			url: `https://rewards-credit-card-api.p.rapidapi.com/${url}`,
-			headers: {
-				"X-RapidAPI-Key": process.env.X_RAPID_API_KEY,
-				"X-RapidAPI-Host": process.env.X_RAPID_API_HOST,
-			},
+			url: `https://${process.env.X_RAPID_API_HOST}/v1/${url}?skey=${process.env.X_RAPID_API_KEY}`,
 		};
 		axios
 			.request(options)
