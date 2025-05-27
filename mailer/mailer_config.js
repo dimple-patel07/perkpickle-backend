@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 function mailerConfig(email, subject, htmlTemplate) {
 	const transporter = nodemailer.createTransport({
-		service: "hotmail",
+		service: process.env.SERVICE,
 		auth: {
 			user: process.env.MAILER_EMAIL,
 			pass: process.env.MAILER_PASSWORD,
