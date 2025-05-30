@@ -1,17 +1,20 @@
+require("dotenv").config();
+require('./services/utils/cronJobs');
 const express = require("express");
 const cors = require("cors");
 const rapidApi = require("./api/card/rapid_api");
 const authApi = require("./api/auth/auth_api");
+const googlePlaces = require('./api/location/googlePlaces');
 const userApi = require("./api/user/user_api");
 const contactMailer = require("./mailer/contact_mailer");
 const cardApi = require("./api/card/card_api");
 const initialDbSetup = require("./services/db/initial_db_service");
 const { handleApiRequest } = require("./services/utils/common_utils");
 const { updateCardImage } = require("./services/migrations/1708171173876_update_card_image");
-require("dotenv").config();
 const app = express();
 app.use(express.json()); //Add it first then others
 app.use(cors());
+app.use('/api', googlePlaces);
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
 	handleApiRequest(req, res, next);
