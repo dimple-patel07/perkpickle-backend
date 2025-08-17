@@ -112,6 +112,135 @@ function getAllCards() {
 		}
 	});
 }
+
+// get all indian cards
+function getAllIndianCards(cardName) {
+	return new Promise(async (resolve) => {
+		const sql = `SELECT 
+			card_name,
+			issuer_bank,
+			card_key,
+			card_type,
+			card_network,
+			card_url,
+			is_active,
+			annual_fees,
+			fx_fees,
+			credit_range,
+			currency,
+			is_lounge_access,
+			card_disclaimer
+			from dbo."card" WHERE card_name ILIKE '%${cardName}%'`;
+		const client = await dbService.connectDb();
+		let cardList = [];
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("card selection error :: ", error);
+				} else if (result?.rows?.length > 0) {
+					cardList = result.rows;
+				}
+				await dbService.disConnectDb();
+				resolve(cardList);
+			});
+		} else {
+			resolve(cardList);
+		}
+	});
+}
+
+// get all indian cards
+function getAllCardRewards(req) {
+	return new Promise(async (resolve) => {
+		const { merchant, cardIds, placeType } = req.query;
+		
+		if (!cardIds) {
+			return res.status(400).json({ error: 'Missing cardIds' });
+		}
+	
+		const cardIdArray = cardIds.split(',').map(id => parseInt(id.trim())).filter(Number.isInteger);
+		const sql = `SELECT * FROM  dbo.get_rewards_json(ARRAY[${cardIdArray}], '${merchant}', ${placeType});`;
+		const client = await dbService.connectDb();
+		let cardList = [];
+
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("card selection error :: ", error);
+				} else if (result !== '') {
+					cardList = JSON.stringify(result, null, 2);
+				}
+				await dbService.disConnectDb();
+				resolve(cardList);
+			});
+		} else {
+			resolve(cardList);
+		}
+	});
+}
+
+function getAllCardBenefits(params) {
+	return new Promise(async (resolve) => {
+		const {  cardIds } = params;
+		
+		if (!cardIds) {
+			return res.status(400).json({ error: 'Missing cardIds' });
+		}
+	
+		const cardIdArray = cardIds.split(',').map(id => parseInt(id.trim())).filter(Number.isInteger);
+		const sql = `SELECT card_id, benefit_title, benefit_description FROM  dbo."CardBenefits" WHERE card_id = ANY(ARRAY[${cardIdArray}]);`;
+		const client = await dbService.connectDb();
+		let cardList = [];
+
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("card selection error :: ", error);
+				} else if (result !== '') {
+					cardList = JSON.stringify(result, null, 2);
+				}
+				await dbService.disConnectDb();
+				resolve(cardList);
+			});
+		} else {
+			resolve(cardList);
+		}
+	});
+}
+
+function getAllCardSignUpBenefits(params) {
+	return new Promise(async (resolve) => {
+		const {  cardIds } = params;
+		
+		if (!cardIds) {
+			return res.status(400).json({ error: 'Missing cardIds' });
+		}
+	
+		const cardIdArray = cardIds.split(',').map(id => parseInt(id.trim())).filter(Number.isInteger);
+		const sql = `SELECT SB.signup_benefit_id, SB.card_id, SB.card_name, SB.fees, SB.fee_waiver_condition, 
+		SB.bonus_type, SB.signup_description, SB.min_spend_amount, 
+		SB.spend_period, SB.validity,  CB.benefit_title, CB.benefit_description 
+		FROM dbo."SignUpBenefits" SB
+		INNER JOIN dbo."CardBenefits" CB ON CB.card_id = SB.card_id WHERE SB.card_id = ANY(ARRAY[${cardIdArray}]);`;
+		const client = await dbService.connectDb();
+		let cardList = [];
+
+		if (client) {
+			client.query(sql, async (error, result) => {
+				if (error) {
+					console.error("card selection error :: ", error);
+				} else if (result !== '') {
+					cardList = JSON.stringify(result, null, 2);
+				}
+				await dbService.disConnectDb();
+				resolve(cardList);
+			});
+		} else {
+			resolve(cardList);
+		}
+	});
+}
+
 // get card by card key
 function getCardByCardKey(cardKey) {
 	return new Promise(async (resolve) => {
@@ -275,4 +404,4 @@ function dashboardCount(req){
 	}
 	});
 }
-module.exports = { createCardsTable, createCard, updateCard, getAllCards, getCardByCardKey, deleteCard, getListOfCards, findAllCards,dashboardCount };
+module.exports = { createCardsTable, createCard, updateCard, getAllCards, getAllIndianCards, getAllCardRewards, getAllCardBenefits, getAllCardSignUpBenefits, getCardByCardKey, deleteCard, getListOfCards, findAllCards,dashboardCount };

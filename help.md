@@ -101,6 +101,8 @@ encrypted_data = window.btoa(JSON.stringify(data))
 
 => http://localhost:3300/getAllCards
 
+=> http://localhost:3300/getCreditCardsList
+
 ### get card by card key
 
 =>http://localhost:3300/getCardByCardKey
@@ -146,7 +148,7 @@ encrypted_data = window.btoa(JSON.stringify(data))
 
 => select available cards
 
--   on card selection check the card detail(json-data) is available or not; if not available then set selected card detail implicitly using getCardDetail api
+- on card selection check the card detail(json-data) is available or not; if not available then set selected card detail implicitly using getCardDetail api
 
 => get selected category associated cards
 => compare category cards with saved cards
@@ -154,4 +156,4 @@ encrypted_data = window.btoa(JSON.stringify(data))
 
 => non matching cards (not found from saved cards but available in the category associated cards) consider as 'best offers'
 
--   if any best offer card is not available in db; add missing card in background using addNewCards api (+temporary set default card image)
+- if any best offer card is not available in db; add missing card in background using addNewCards api (+temporary set default card image)

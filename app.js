@@ -48,6 +48,26 @@ app.post("/getAllCards", async (req, res) => {
 	res.send(await cardApi.getAllCards(req, res));
 });
 
+// Get list of indian credit cards
+app.post("/getCreditCardsList", async (req, res) => {
+	res.send(await cardApi.getCreditCardsList(req, res));
+});
+
+// Get list of rewards on cards
+app.get("/getAllCardRewards", async(req, res) => {
+	res.send(await cardApi.getAllCardRewards(req, res));
+});
+
+// Get list of benefits on cards
+app.get("/getAllCardBenefits", async(req, res) => {
+	res.send(await cardApi.getAllCardBenefits(req, res));
+});
+
+// Get list of sign up on cards
+app.get("/getAllCardSignUpBenefits", async(req, res) => {
+	res.send(await cardApi.getAllCardSignUpBenefits(req, res));
+})
+
 // get card by card key - return specific card detail
 app.post("/getCardByCardKey", async (req, res) => {
 	res.send(await cardApi.getCardByCardKey(req, res));

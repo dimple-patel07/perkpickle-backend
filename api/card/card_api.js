@@ -97,6 +97,80 @@ async function getCardByCardKey(req, res) {
 		return card;
 	}
 }
+
+async function getCreditCardsList(req, res) {
+	let cards = [];
+	try {
+		const params = req.query;
+		switch(params.country){
+			case "india":
+				cards = await cardDbService.getAllIndianCards(params.cardName);
+				res.statusCode = 200;
+			default:
+				cards = await cardDbService.getAllIndianCards(params.cardName);
+				res.statusCode = 200;
+		}
+	} catch (error) {
+		console.error("get indian credit cards api failed :: ", error);
+	} finally {
+		return cards;
+	}
+}
+
+async function getAllCardRewards(req, res) {
+	let cards = [];
+	try {
+		switch(req.query.country){
+			case "india":
+				cards = await cardDbService.getAllCardRewards(req);
+				res.statusCode = 200;
+			default:
+				cards = await cardDbService.getAllCardRewards(req);
+				res.statusCode = 200;
+		}
+	} catch (error) {
+		console.error("get indian credit cards api failed :: ", error);
+	} finally {
+		return cards;
+	}
+}
+
+async function getAllCardBenefits(req, res) {
+	let cards = [];
+	try {
+		switch(req.query.country){
+			case "india":
+				cards = await cardDbService.getAllCardBenefits(req);
+				res.statusCode = 200;
+			default:
+				cards = await cardDbService.getAllCardBenefits(req);
+				res.statusCode = 200;
+		}
+	} catch (error) {
+		console.error("get indian credit cards api failed :: ", error);
+	} finally {
+		return cards;
+	}
+}
+
+async function getAllCardSignUpBenefits(req, res) {
+	let cards = [];
+	try {
+		switch(req.query.country){
+			case "india":
+				cards = await cardDbService.getAllCardSignUpBenefits(req);
+				res.statusCode = 200;
+			default:
+				cards = await cardDbService.getAllCardSignUpBenefits(req);
+				res.statusCode = 200;
+		}
+	} catch (error) {
+		console.error("get indian credit cards api failed :: ", error);
+	} finally {
+		return cards;
+	}
+}
+
 // delete card
 async function deleteCard(req, res) {
 	let result = null;
@@ -270,4 +344,4 @@ async function getDashboardCount(req, res) {
 		return cards;
 	}
 }
-module.exports = { getAllCards, getCardByCardKey, createCard, updateCard, deleteCard, findAllCards, getCardDetail, addNewCards, getDashboardCount };
+module.exports = { getAllCards, getCardByCardKey, getCreditCardsList, getAllCardRewards, getAllCardBenefits, getAllCardSignUpBenefits, createCard, updateCard, deleteCard, findAllCards, getCardDetail, addNewCards, getDashboardCount };
